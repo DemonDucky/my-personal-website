@@ -1,0 +1,175 @@
+openapi: 3.0.0
+info:
+  title: Banking API
+  description: An API for checking transactions, generating QR payment codes, and fetching transaction histories.
+  version: 1.0.0
+
+paths:
+  /api/check-transactions:
+    post:
+      summary: Check Transactions
+      description: Validates a list of transaction checks against historical transaction data.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                checks:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/CheckInput'
+                  minItems: 1
+              required:
+                - checks
+      responses:
+        '200':
+          description: Successful response with transaction check results
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CheckOutput'
+        '400':
+          description: Invalid or empty checks array
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Invalid or empty checks array
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Unknown error
+
+  /api/generate-qr:
+    post:
+      summary: Generate QR Payment Code
+      description: Generates a QR code string for a payment using VietQR standards.
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                amount:
+                  type: string
+                  description: The payment amount in VND (defaults to 100000 if not provided)
+                  default: '100000'
+                bankNumber:
+                  type: string
+                  description: The bank account number (defaults to 00000118899 if not provided)
+                  default: '00000118899'
+                description:
+                  type: string
+                  description: The payment purpose/description (defaults to empty string if not provided)
+                  default: ''
+      responses:
+        '200':
+          description: QR code string generated successfully
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: '000201010212...'
+        '500':
+          description: Server error (e.g., QR generation failed)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Unknown error
+
+  /api/histories:
+    get:
+      summary: Fetch Transaction Histories
+      description: Retrieves transaction histories for a specified number of days.
+      parameters:
+        - name: days
+          in: query
+          description: Number of days to fetch history for (defaults to 30 if not provided)
+          required: false
+          schema:
+            type: integer
+            default: 30
+      responses:
+        '200':
+          description: Successful response with transaction histories
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  transactionInfos:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        amount:
+                          type: string
+                          description: Transaction amount
+                        description:
+                          type: string
+                          description: Transaction description
+                        date:
+                          type: string
+                          description: Transaction date (assumed format from getHistories)
+                      required:
+                        - amount
+                        - description
+        '500':
+          description: Server error (e.g., token fetch or history retrieval failed)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Unknown error
+
+components:
+  schemas:
+    CheckInput:
+      type: object
+      properties:
+        number:
+          type: string
+          description: The transaction amount as a string (parsed to a float internally)
+          example: '100.50'
+        description:
+          type: string
+          description: A description to match against transaction descriptions
+          example: 'Payment for groceries'
+      required:
+        - number
+        - description
+    CheckOutput:
+      type: object
+      properties:
+        status:
+          type: boolean
+          description: Whether a matching transaction was found
+          example: true
+        id:
+          type: string
+          description: The description from the input, used as an identifier
+          example: 'Payment for groceries'
+      required:
+        - status
+        - id
