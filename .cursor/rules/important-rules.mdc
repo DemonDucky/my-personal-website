@@ -1,0 +1,100 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Key Guidelines
+- Always adhere to accessibility (a11y) standards in all Svelte components and applications.
+- Always use TypeScript in Svelte files, ensuring type safety with `.svelte` scripts (e.g., `<script lang="ts">`) and related `.ts` files.
+- Place commonly used components (e.g., buttons, inputs) in `lib/components`; for single-use components, place them alongside the file where they are used.
+- Always use ShadCN/Svelte components — they are direct ports from ShadCN React with no difference in design or usage, only the install CLI differs (e.g., pnpm dlx shadcn-svelte@latest add alert-dialog); do not create custom components unless there's no ShadCN alternative available.
+- Always use pnpm for installation
+- Never use $effect unless there’s absolutely no other option (last resort / hatch escape); if you need reactivity with dependencies, use $derived or $derived.by instead.
+- Always create a messages object to store all text used in the page/component; there should be no hardcoded text in the HTML unless it’s dynamically rendered.
+
+# Svelte 5 Documentation
+
+- **Runes**:
+  - `$state`: Creates reactive variables, e.g., `let count = $state(0)`.
+  - `$state.raw`: Shallow state, reassign entire object to update, e.g., `let person = $state.raw({ name: 'Heraclitus' })`.
+  - `$state.snapshot`: Copies reactive state to plain object, e.g., `$state.snapshot(counter)`.
+  - `$derived`: Computes reactive values, e.g., `let doubled = $derived(count * 2)`.
+  - `$derived.by`: Handles complex logic, e.g., `$derived.by(() => { ... })`.
+  - `$effect`: Executes side effects, e.g., `$effect(() => console.log(size))`.
+  - `$effect.pre`: Runs before DOM updates.
+  - `$effect.tracking`: Checks if in reactive context.
+  - `$effect.root`: Creates non-tracked scope with manual cleanup.
+  - `$props`: Defines component props, e.g., `let { foo = true } = $props()`.
+  - `$bindable`: Marks props for two-way binding, e.g., `let { value = $bindable() } = $props()`.
+  - `$host`: Accesses host element in custom elements.
+  - `$props.id()`: Generates unique component ID.
+
+- **Snippets**:
+  - Define reusable markup, e.g., `{#snippet figure(image)}...{/snippet}`.
+  - Pass as props, render with `{@render snippet(params)}`.
+  - Lexical scope limits visibility; supports typing via `Snippet` interface.
+
+- **Elements Events**:
+  - Instead of on:event, you should always use oneven. For example `on:submit -> onsubmit, on:click -> onclick` and must use e.preventDefault() instead of on:submit|preventDefault
+
+- **Error Boundary**:
+  - Use `<svelte:boundary>` to catch rendering errors, e.g., `<svelte:boundary onerror={...}>`.
+  - Optional `failed` snippet for fallback UI.
+
+- **Classes**:
+  - Conditional class assignment, e.g., `<div class={{ cool, lame: !cool }}>`.
+  
+# SvelteKit Documentation
+
+- **Project Setup**:
+  - Use `pnpm dlx sv create` to scaffold.
+  - Required: `package.json` with devDependencies, `vite.config.js`, `svelte.config.js`.
+  - Structure: `src/lib`, `src/routes`, `static`, `.svelte-kit` (auto-generated).
+
+- **Routing**:
+  - Filesystem-based: `src/routes/.../+page.svelte` maps to URLs.
+  - Files: `+page.svelte`, `+page(.server).js`, `+layout(.server).js`, `+error.svelte`, `+server.js`.
+  - Dynamic routes: `[param]`, rest `[...param]`, optional `[[param]]`.
+
+- **Data Loading**:
+  - `+page.js`: `load` function for universal data, returns `data` prop.
+  - `+page.server.js`: Server-only `load`, supports private data, actions.
+  - `+layout(.server).js`: Supplies data to layouts and children.
+  - Access via `let { data } = $props()` or `page.data`.
+
+- **Forms**:
+  - `+page.server.js` exports `actions` for form handling, e.g., `actions: { default: async (event) => {...} }`.
+  - Use `fail` for validation errors, `redirect` for navigation.
+  - Progressive enhancement with `use:enhance` from `$app/forms`.
+
+- **Page Options**:
+  - `prerender`: Static HTML generation (`true`, `false`, `'auto'`).
+  - `entries`: Lists dynamic route parameters for prerendering.
+  - `ssr`: Disables server-side rendering.
+  - `csr`: Disables client-side hydration.
+
+- **State Management**:
+  - Avoid shared server variables; use cookies and DB.
+  - Keep `load` functions pure; use context API or URL for client state.
+
+- **Hooks**:
+  - Server: `handle`, `handleFetch`, `init`.
+  - Shared: `handleError`.
+  - Universal: `reroute`, `transport`.
+
+- **Adapters**:
+  - Configure in `svelte.config.js` for platforms (e.g., Node, static).
+  - Access platform-specific data via `event.platform`.
+
+- **Imports**:
+  - `@sveltejs/kit`: `error`, `fail`, `json`, `redirect`, etc.
+  - `$app/*`: `forms`, `navigation`, `paths`, `server`, `state`, `env/*`.
+  - `$lib`: Alias for `src/lib`.
+
+- **Images**:
+  - Use Vite for assets, `@sveltejs/enhanced-img` for optimized `<picture>` tags.
+  - Leverage CDNs for dynamic images with libraries like `@unpic/svelte`.
+
+  - **Props in Components**:
+  - Svelte 4: Used `export let` for props, e.g., `export let data;`.
+  - Svelte 5: Use `$props` rune, e.g., `let { data } = $props();` for component props, with optional defaults, e.g., `let { data = {} } = $props();`.
