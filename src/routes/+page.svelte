@@ -1,2 +1,13 @@
-<h1>Welcome to SvelteKit</h1>
-<p>Visit <a href="https://svelte.dev/docs/kit">svelte.dev/docs/kit</a> to read the documentation</p>
+<script lang="ts">
+	import HeroSection from './hero-section.svelte';
+	import AboutMeSection from './about-me-section.svelte';
+	import FeaturedProjectSection from './featured-project-section.svelte';
+	import WhatIDoSection from './what-i-do-section.svelte';
+	import CtaFormSection from './cta-form-section.svelte';
+</script>
+
+<HeroSection />
+<AboutMeSection />
+<WhatIDoSection />
+<FeaturedProjectSection />
+<CtaFormSection />

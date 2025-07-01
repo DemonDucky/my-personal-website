@@ -6,12 +6,15 @@ alwaysApply: true
 # Key Guidelines
 - Always adhere to accessibility (a11y) standards in all Svelte components and applications.
 - Always use TypeScript in Svelte files, ensuring type safety with `.svelte` scripts (e.g., `<script lang="ts">`) and related `.ts` files.
+- Never use custom colors directly; only use color variables defined in `app.css` (e.g., `var(--primary)`) for consistency and theme control.
+- Never introduce a custom svg or anything for icon display. Always use icons from **phosphor-svelte**, and prefer direct path imports (e.g., `import Cube from "phosphor-svelte/lib/Cube"`) for better compile performance. Avoid named imports like `import { X } from "phosphor-svelte"`.
 - Place commonly used components (e.g., buttons, inputs) in `lib/components`; for single-use components, place them alongside the file where they are used.
-- Always use ShadCN/Svelte components — they are direct ports from ShadCN React with no difference in design or usage, only the install CLI differs (e.g., pnpm dlx shadcn-svelte@latest add alert-dialog); do not create custom components unless there's no ShadCN alternative available.
+- Always use ShadCN/Svelte components — they are direct ports from ShadCN React with no difference in design or usage, only the install CLI differs (e.g., pnpm dlx shadcn-svelte@latest add alert-dialog); do not create custom components unless there's no ShadCN alternative available. Use as minimal custom design as possible (prefer none)
 - Always use pnpm for installation
 - Never use $effect unless there’s absolutely no other option (last resort / hatch escape); if you need reactivity with dependencies, use $derived or $derived.by instead.
-- Always create a messages object to store all text used in the page/component; there should be no hardcoded text in the HTML unless it’s dynamically rendered.
-
+- Always create a messages object to store all text used in the page/component; there should be no hardcoded text in the HTML unless it's dynamically rendered from server side, database or anything similar (which we can't do anything about it).
+- Use <enhanced:img> for static images to enable responsive loading with sizes and ?w=, e.g. <enhanced:img src="/hero.png?w=1280;640;400" sizes="(min-width:1920px) 1280px, (min-width:1080px) 640px, (min-width:768px) 400px" />, or <enhanced:img src="./image.png" sizes="min(1280px, 100vw)" />
+- Component filenames should use kebab-case (e.g. my-component.svelte), not PascalCase, to maintain consistency and avoid issues in some environments.
 # Svelte 5 Documentation
 
 - **Runes**:
@@ -42,7 +45,7 @@ alwaysApply: true
   - Optional `failed` snippet for fallback UI.
 
 - **Classes**:
-  - Conditional class assignment, e.g., `<div class={{ cool, lame: !cool }}>`.
+  - Always use conditional class assignment for complex class, e.g., `<div class={{ cool, lame: !cool }}>`.
   
 # SvelteKit Documentation
 
