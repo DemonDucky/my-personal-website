@@ -1,6 +1,8 @@
 <script lang="ts">
 	import { Button } from '$lib/components/ui/button/index.js';
 	import { Badge } from '$lib/components/ui/badge/index.js';
+	import { onMount, tick } from 'svelte';
+	import { ScrollSmoother } from 'gsap/ScrollSmoother';
 
 	const messages = {
 		greeting: 'Xin chào, mình là',
@@ -9,9 +11,16 @@
 			'Mình không chỉ code, mình xây dựng trải nghiệm - nơi ý tưởng trở thành sản phẩm có mục đích',
 		description:
 			'Với mình, sản phẩm không đơn thuần là công cụ, mà là cầu nối cảm xúc, định hình hành vi và tạo dấu ấn khó quên với người dùng.',
-		ctaText: 'Đặt lịch trao đổi',
+		ctaText: 'Liên hệ trao đổi',
 		role: ['Marketing Executive', 'Developer']
 	};
+
+	let scrollSmoother = $state<ScrollSmoother | undefined>(undefined);
+
+	onMount(async () => {
+		await tick();
+		scrollSmoother = ScrollSmoother.get();
+	});
 </script>
 
 <section class="container mx-auto px-6">
@@ -47,7 +56,11 @@
 
 			<!-- CTA -->
 			<div class="pt-4">
-				<Button size="lg">
+				<Button
+					size="lg"
+					class="cursor-pointer"
+					onclick={() => scrollSmoother?.scrollTo('#contact', true)}
+				>
 					{messages.ctaText}
 				</Button>
 			</div>

@@ -30,14 +30,14 @@
 			label: messages.about,
 			variant: 'ghost'
 		},
-		projects: {
-			href: '#projects',
-			label: messages.projects,
-			variant: 'ghost'
-		},
 		skills: {
 			href: '#skills',
 			label: messages.skills,
+			variant: 'ghost'
+		},
+		projects: {
+			href: '#projects',
+			label: messages.projects,
 			variant: 'ghost'
 		},
 		contact: {
@@ -67,7 +67,7 @@
 		<!-- Desktop Navigation -->
 		<nav class="hidden items-center gap-6 md:flex">
 			{#each Object.values(navLinks) as link}
-				<Button variant={link.variant} onclick={() => navigate(link.href)}>
+				<Button variant={link.variant} class="cursor-pointer" onclick={() => navigate(link.href)}>
 					{link.label}
 				</Button>
 			{/each}

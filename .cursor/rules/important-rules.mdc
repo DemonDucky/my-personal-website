@@ -12,7 +12,7 @@ alwaysApply: true
 - Always use ShadCN/Svelte components — they are direct ports from ShadCN React with no difference in design or usage, only the install CLI differs (e.g., pnpm dlx shadcn-svelte@latest add alert-dialog); do not create custom components unless there's no ShadCN alternative available. Use as minimal custom design as possible (prefer none)
 - Always use pnpm for installation
 - Never use $effect unless there’s absolutely no other option (last resort / hatch escape); if you need reactivity with dependencies, use $derived or $derived.by instead.
-- Always create a messages object to store all text used in the page/component; there should be no hardcoded text in the HTML unless it's dynamically rendered from server side, database or anything similar (which we can't do anything about it).
+- Always define a messages object to store all static text used in the page or component. Do not hardcode any text directly in the HTML, unless it's dynamically rendered from the server, database, or an external source — in those cases, it's out of our control and acceptable. For all other cases, using the messages object is mandatory, no exceptions.
 - Use <enhanced:img> for static images to enable responsive loading with sizes and ?w=, e.g. <enhanced:img src="/hero.png?w=1280;640;400" sizes="(min-width:1920px) 1280px, (min-width:1080px) 640px, (min-width:768px) 400px" />, or <enhanced:img src="./image.png" sizes="min(1280px, 100vw)" />
 - Component filenames should use kebab-case (e.g. my-component.svelte), not PascalCase, to maintain consistency and avoid issues in some environments.
 # Svelte 5 Documentation

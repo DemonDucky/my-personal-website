@@ -1,26 +1,54 @@
 <script lang="ts">
 	import { Button } from '$lib/components/ui/button/index.js';
 	import { Input } from '$lib/components/ui/input/index.js';
+	import { Textarea } from '$lib/components/ui/textarea/index.js';
 	import { Card, CardContent, CardHeader, CardTitle } from '$lib/components/ui/card/index.js';
 	import ThreeDash from '$lib/components/ui/decoration/three-dash.svelte';
 	import ArrowRight from 'phosphor-svelte/lib/ArrowRight';
+	import * as Form from '$lib/components/ui/form/index.js';
+	import { contactFormSchema, type ContactFormSchema } from '$lib/schema';
+	import { superForm, type SuperValidated, type Infer } from 'sveltekit-superforms';
+	import { zodClient } from 'sveltekit-superforms/adapters';
+	import { toast } from 'svelte-sonner';
 
 	const messages = {
 		sectionTitle: 'Bạn có dự án cần phát triển?',
 		description:
 			'Hãy chia sẻ ý tưởng của bạn và mình sẽ liên hệ lại trong vòng 24 giờ để thảo luận thêm về cách chúng ta có thể hợp tác.',
+		cardTitle: 'Liên hệ với mình',
 		nameLabel: 'Tên của bạn',
+		namePlaceholder: 'Nhập tên của bạn',
 		emailLabel: 'Email',
+		emailPlaceholder: 'email@example.com',
+		projectNameLabel: 'Tên dự án',
+		projectNamePlaceholder: 'Nhập tên dự án của bạn',
 		projectLabel: 'Mô tả ngắn về dự án',
+		projectPlaceholder: 'Mô tả ngắn về dự án của bạn...',
 		submitText: 'Gửi yêu cầu',
-		thankYouMessage: 'Cảm ơn bạn đã liên hệ! Mình sẽ phản hồi sớm nhất có thể.',
+		submitting: 'Đang gửi...',
+		thankYouMessage: 'Gửi thành công. Cảm ơn bạn đã liên hệ! Mình sẽ phản hồi sớm nhất có thể.',
 		privacyNote:
-			'Mình tôn trọng quyền riêng tư của bạn và chỉ sử dụng thông tin này để liên hệ về dự án.'
+			'Mình luôn tôn trọng quyền riêng tư của bạn và chỉ sử dụng thông tin này để liên hệ về dự án.'
 	};
 
-	let name = '';
-	let email = '';
-	let projectDescription = '';
+	let { contactForm }: { contactForm: SuperValidated<Infer<ContactFormSchema>> } = $props();
+
+	let submitted = $state(false);
+
+	const form = superForm(contactForm, {
+		validators: zodClient(contactFormSchema),
+		taintedMessage: 'Vui lòng điền đầy đủ thông tin',
+		multipleSubmits: 'prevent',
+		onUpdated({ form }) {
+			if (form.valid) {
+				submitted = true;
+				console.log(submitted);
+				toast.success(messages.thankYouMessage, { position: 'top-center' });
+			}
+		}
+	});
+
+	const { form: formData, enhance, submitting } = form;
 </script>
 
 <section class="container mx-auto px-6 py-20" id="contact">
@@ -38,66 +66,94 @@
 	<div class="mx-auto max-w-2xl">
 		<Card class="border-primary overflow-hidden">
 			<CardHeader>
-				<CardTitle class="text-2xl">Liên hệ với mình</CardTitle>
+				<CardTitle class="text-2xl">{messages.cardTitle}</CardTitle>
 			</CardHeader>
 			<CardContent class="space-y-6">
-				<form class="space-y-6">
-					<!-- Name Input -->
-					<div class="space-y-2">
-						<label for="name" class="text-sm font-medium">
-							{messages.nameLabel}
-						</label>
-						<Input
-							id="name"
-							type="text"
-							bind:value={name}
-							placeholder="Nhập tên của bạn"
-							required
-						/>
+				{#if submitted}
+					<div class="py-8 text-center">
+						<h3 class="mb-2 text-xl font-bold">{messages.thankYouMessage}</h3>
 					</div>
+				{:else}
+					<form class="space-y-6" method="POST" action="?/contact" use:enhance>
+						<!-- Name Input -->
+						<Form.Field {form} name="name">
+							<Form.Control>
+								{#snippet children({ props })}
+									<Form.Label>{messages.nameLabel}</Form.Label>
+									<Input
+										type="text"
+										placeholder={messages.namePlaceholder}
+										{...props}
+										bind:value={$formData.name}
+									/>
+								{/snippet}
+							</Form.Control>
+							<Form.FieldErrors />
+						</Form.Field>
 
-					<!-- Email Input -->
-					<div class="space-y-2">
-						<label for="email" class="text-sm font-medium">
-							{messages.emailLabel}
-						</label>
-						<Input
-							id="email"
-							type="email"
-							bind:value={email}
-							placeholder="email@example.com"
-							required
-						/>
-					</div>
+						<!-- Email Input -->
+						<Form.Field {form} name="email">
+							<Form.Control>
+								{#snippet children({ props })}
+									<Form.Label>{messages.emailLabel}</Form.Label>
+									<Input
+										type="email"
+										placeholder={messages.emailPlaceholder}
+										{...props}
+										bind:value={$formData.email}
+									/>
+								{/snippet}
+							</Form.Control>
+							<Form.FieldErrors />
+						</Form.Field>
 
-					<!-- Project Description -->
-					<div class="space-y-2">
-						<label for="project" class="text-sm font-medium">
-							{messages.projectLabel}
-						</label>
-						<div class="relative">
-							<textarea
-								id="project"
-								bind:value={projectDescription}
-								placeholder="Mô tả ngắn về dự án của bạn..."
-								class="border-input ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring min-h-28 w-full rounded-md border bg-transparent px-3 py-2 text-sm outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
-								required
-							></textarea>
-							<div
-								class="bg-primary/10 absolute -top-1 -right-1 h-6 w-6 animate-pulse rounded-full"
-							></div>
-							<div
-								class="bg-primary/15 absolute bottom-1 -left-2 h-4 w-4 animate-pulse rounded-full delay-300"
-							></div>
-						</div>
-					</div>
+						<!-- Project Name Input -->
+						<Form.Field {form} name="projectName">
+							<Form.Control>
+								{#snippet children({ props })}
+									<Form.Label>{messages.projectNameLabel}</Form.Label>
+									<Input
+										type="text"
+										placeholder={messages.projectNamePlaceholder}
+										{...props}
+										bind:value={$formData.projectName}
+									/>
+								{/snippet}
+							</Form.Control>
+							<Form.FieldErrors />
+						</Form.Field>
 
-					<!-- Submit Button -->
-					<Button type="submit" class="w-full" size="lg">
-						<span>{messages.submitText}</span>
-						<ArrowRight size={16} />
-					</Button>
-				</form>
+						<!-- Project Description -->
+						<Form.Field {form} name="projectDescription">
+							<Form.Control>
+								{#snippet children({ props })}
+									<Form.Label>{messages.projectLabel}</Form.Label>
+									<div class="relative">
+										<Textarea
+											placeholder={messages.projectPlaceholder}
+											class="min-h-28"
+											{...props}
+											bind:value={$formData.projectDescription}
+										/>
+										<div
+											class="bg-primary/10 absolute -top-1 -right-1 h-6 w-6 animate-pulse rounded-full"
+										></div>
+										<div
+											class="bg-primary/15 absolute bottom-1 -left-2 h-4 w-4 animate-pulse rounded-full delay-300"
+										></div>
+									</div>
+								{/snippet}
+							</Form.Control>
+							<Form.FieldErrors />
+						</Form.Field>
+
+						<!-- Submit Button -->
+						<Button type="submit" class="w-full" size="lg" disabled={$submitting}>
+							<span>{$submitting ? messages.submitting : messages.submitText}</span>
+							<ArrowRight size={16} />
+						</Button>
+					</form>
+				{/if}
 
 				<!-- Privacy Note -->
 				<p class="text-muted-foreground text-center text-xs">
