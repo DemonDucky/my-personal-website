@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { Button } from '$lib/components/ui/button';
 	import { Input } from '$lib/components/ui/input';
+	import { Textarea } from '$lib/components/ui/textarea';
 	import { Card, CardContent, CardHeader, CardTitle } from '$lib/components/ui/card';
 	import * as AlertDialog from '$lib/components/ui/alert-dialog/index.js';
 	import RandomWheel from './RandomWheel.svelte';
@@ -25,8 +26,9 @@
 
 	const messages = {
 		title: 'Bidding Game',
-		teamAmountLabel: 'Number of Teams',
-		teamAmountPlaceholder: 'Enter number of teams',
+		teamNamesLabel: 'Team Names/Numbers',
+		teamNamesPlaceholder:
+			'Enter team names or numbers, one per line\nExample:\n1\n3\n6\n\nOr:\nRed Team\nBlue Team\nGreen Team',
 		baseScoreLabel: 'Base Score',
 		baseScorePlaceholder: 'Enter base score',
 		startGameButton: 'Start Game',
@@ -40,31 +42,58 @@
 		correctButton: 'Right',
 		wrongButton: 'Wrong',
 		newRoundButton: 'New Round',
-		backToSetupButton: 'Back to Setup'
+		backToSetupButton: 'Back to Setup',
+		confirmBackToSetupTitle: 'Confirm Back to Setup',
+		confirmBackToSetupDescription:
+			'Are you sure you want to go back to setup? This will reset all current game progress and scores.',
+		confirmYes: 'Yes, Go Back',
+		confirmNo: 'No, Continue Game'
 	};
 
 	let gamePhase = $state<GamePhase>('prepare');
-	let teamAmount = $state<number>();
+	let teamNamesInput = $state<string>('');
 	let baseScore = $state<number>();
 	let teams = $state<Team[]>([]);
 	let showBiddingResult = $state(false);
 	let showRandomWheel = $state(false);
+	let showBackToSetupDialog = $state(false);
 	let highestBidder = $state<HighestBidder | null>(null);
 
+	// Derived value to check if we have valid team names
+	let hasValidTeams = $derived(() => {
+		const teamNames = teamNamesInput
+			.trim()
+			.split('\n')
+			.filter((name) => name.trim() !== '');
+		return teamNames.length > 0;
+	});
+
 	function startGame() {
-		if (!teamAmount || baseScore === undefined || teamAmount <= 0 || baseScore < 0) {
+		const teamNames = teamNamesInput
+			.trim()
+			.split('\n')
+			.filter((name) => name.trim() !== '')
+			.map((name) => name.trim());
+
+		if (teamNames.length === 0 || baseScore === undefined || baseScore < 0) {
 			return;
 		}
 
 		// Create local variable after type guard to ensure TypeScript knows it's a number
 		const initialScore = baseScore;
 
-		teams = Array.from({ length: teamAmount }, (_, index) => ({
-			id: index + 1,
-			name: `${messages.teamPrefix} ${index + 1}`,
-			score: initialScore,
-			currentBid: 0
-		}));
+		teams = teamNames.map((name, index) => {
+			// If the input is a number, add "Team" prefix, otherwise use as-is
+			const isNumber = /^\d+$/.test(name);
+			const teamName = isNumber ? `${messages.teamPrefix} ${name}` : name;
+
+			return {
+				id: index + 1,
+				name: teamName,
+				score: initialScore,
+				currentBid: 0
+			};
+		});
 
 		gamePhase = 'playing';
 	}
@@ -135,13 +164,18 @@
 		highestBidder = null;
 	}
 
+	function confirmBackToSetup() {
+		showBackToSetupDialog = true;
+	}
+
 	function backToSetup() {
 		gamePhase = 'prepare';
 		teams = [];
-		teamAmount = undefined;
+		teamNamesInput = '';
 		baseScore = undefined;
 		showBiddingResult = false;
 		showRandomWheel = false;
+		showBackToSetupDialog = false;
 		highestBidder = null;
 	}
 </script>
@@ -151,38 +185,36 @@
 
 	{#if gamePhase === 'prepare'}
 		<div class="mx-auto mb-8 flex max-w-2xl flex-col gap-6">
-			<div class="grid grid-cols-1 gap-4 md:grid-cols-2">
-				<div class="space-y-2">
-					<label for="team-amount" class="text-sm font-medium">
-						{messages.teamAmountLabel}
-					</label>
-					<Input
-						id="team-amount"
-						type="number"
-						min="1"
-						placeholder={messages.teamAmountPlaceholder}
-						bind:value={teamAmount}
-					/>
-				</div>
+			<div class="space-y-2">
+				<label for="team-names" class="text-sm font-medium">
+					{messages.teamNamesLabel}
+				</label>
+				<Textarea
+					id="team-names"
+					placeholder={messages.teamNamesPlaceholder}
+					bind:value={teamNamesInput}
+					rows={6}
+					class="min-h-[150px] resize-y"
+				/>
+			</div>
 
-				<div class="space-y-2">
-					<label for="base-score" class="text-sm font-medium">
-						{messages.baseScoreLabel}
-					</label>
-					<Input
-						id="base-score"
-						type="number"
-						min="0"
-						placeholder={messages.baseScorePlaceholder}
-						bind:value={baseScore}
-					/>
-				</div>
+			<div class="space-y-2">
+				<label for="base-score" class="text-sm font-medium">
+					{messages.baseScoreLabel}
+				</label>
+				<Input
+					id="base-score"
+					type="number"
+					min="0"
+					placeholder={messages.baseScorePlaceholder}
+					bind:value={baseScore}
+				/>
 			</div>
 
 			<div class="flex justify-center">
 				<Button
 					onclick={startGame}
-					disabled={!teamAmount || baseScore === undefined || teamAmount <= 0 || baseScore < 0}
+					disabled={!hasValidTeams || baseScore === undefined || baseScore < 0}
 					class="px-8"
 				>
 					{messages.startGameButton}
@@ -199,7 +231,7 @@
 				>
 					{messages.stopBiddingButton}
 				</Button>
-				<Button onclick={backToSetup} variant="outline">
+				<Button onclick={confirmBackToSetup} variant="outline">
 					{messages.backToSetupButton}
 				</Button>
 			</div>
@@ -286,6 +318,26 @@
 				</AlertDialog.Cancel>
 				<AlertDialog.Action onclick={() => handleBiddingResult(true)}>
 					{messages.correctButton}
+				</AlertDialog.Action>
+			</AlertDialog.Footer>
+		</AlertDialog.Content>
+	</AlertDialog.Root>
+
+	<!-- Back to Setup Confirmation Dialog -->
+	<AlertDialog.Root bind:open={showBackToSetupDialog}>
+		<AlertDialog.Content>
+			<AlertDialog.Header>
+				<AlertDialog.Title>{messages.confirmBackToSetupTitle}</AlertDialog.Title>
+				<AlertDialog.Description>
+					{messages.confirmBackToSetupDescription}
+				</AlertDialog.Description>
+			</AlertDialog.Header>
+			<AlertDialog.Footer>
+				<AlertDialog.Cancel onclick={() => (showBackToSetupDialog = false)}>
+					{messages.confirmNo}
+				</AlertDialog.Cancel>
+				<AlertDialog.Action onclick={backToSetup}>
+					{messages.confirmYes}
 				</AlertDialog.Action>
 			</AlertDialog.Footer>
 		</AlertDialog.Content>

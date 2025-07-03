@@ -4,6 +4,7 @@
 	import FeaturedProjectSection from './featured-project-section.svelte';
 	import HeroSection from './hero-section.svelte';
 	import WhatIDoSection from './what-i-do-section.svelte';
+	import Test1 from './test1.svx';
 
 	const messages = {
 		title: 'Lương Tuấn Anh - Web Developer & Marketing Executive',
@@ -30,3 +31,6 @@
 <WhatIDoSection />
 <FeaturedProjectSection />
 <CtaFormSection contactForm={data.contactForm} />
+<article class="prose prose-zinc mx-auto max-w-4xl px-6 py-8">
+	<Test1 />
+</article>
