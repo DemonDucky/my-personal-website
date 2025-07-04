@@ -9,6 +9,7 @@ alwaysApply: true
 - Never use custom colors directly; only use color variables defined in `app.css` (e.g., `var(--primary)`) for consistency and theme control.
 - Never introduce a custom svg or anything for icon display. Always use icons from **phosphor-svelte**, and prefer direct path imports (e.g., `import Cube from "phosphor-svelte/lib/Cube"`) for better compile performance. Avoid named imports like `import { X } from "phosphor-svelte"`.
 - Place commonly used components (e.g., buttons, inputs) in `lib/components`; for single-use components, place them alongside the file where they are used.
+- Avoid large, monolithic files; split UI into small, maintainable components and import as needed.
 - Always use ShadCN/Svelte components — they are direct ports from ShadCN React with no difference in design or usage, only the install CLI differs (e.g., pnpm dlx shadcn-svelte@latest add alert-dialog); do not create custom components unless there's no ShadCN alternative available. Use as minimal custom design as possible (prefer none)
 - Always use pnpm for installation
 - Never use $effect unless there’s absolutely no other option (last resort / hatch escape); if you need reactivity with dependencies, use $derived or $derived.by instead.

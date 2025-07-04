@@ -76,8 +76,8 @@
 }
 
 @theme {
-	--font-heading: 'DM Serif Display', serif;
-	--font-body: 'Inter', sans-serif;
+	--font-heading: 'Playfair Display', serif;
+	--font-body: 'Be Vietnam Pro', sans-serif;
 }
 
 @theme inline {

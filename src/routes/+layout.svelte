@@ -1,7 +1,7 @@
 <script lang="ts">
 	import '../app.css';
 	import Header from '$lib/components/header.svelte';
-	import { onMount } from 'svelte';
+	import { onMount, tick } from 'svelte';
 	import gsap from 'gsap';
 	import { ScrollSmoother } from 'gsap/ScrollSmoother';
 	import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -9,6 +9,8 @@
 	import { locales } from '$lib/paraglide/runtime';
 	import { page } from '$app/state';
 	import { Toaster } from '$lib/components/ui/sonner/index.js';
+	import { ModeWatcher } from 'mode-watcher';
+	import { afterNavigate, disableScrollHandling } from '$app/navigation';
 	let { children } = $props();
 
 	onMount(() => {
@@ -19,9 +21,10 @@
 		ScrollSmoother.create({
 			wrapper: '#smooth-wrapper',
 			content: '#smooth-content',
+			normalizeScroll: true,
 			smooth: 1, // how long (in seconds) it takes to "catch up" to the native scroll position
 			effects: true, // looks for data-speed and data-lag attributes on elements
-			smoothTouch: 0.1 // much shorter smoothing time on touch devices
+			smoothTouch: 0.1 // much shorter smoothing time on touch devices,
 		});
 	});
 
@@ -56,28 +59,15 @@
 	{/each}
 </div>
 
-<div id="smooth-wrapper" class="mt-16">
+<div id="smooth-wrapper">
 	<div id="smooth-content">
 		<!-- ALL YOUR CONTENT HERE -->
-
-		<main class="bg-background text-foreground flex min-h-screen flex-col">
+		<main class="bg-background text-foreground min-h-screen pt-16">
 			{@render children()}
 		</main>
 	</div>
 </div>
-
+<ModeWatcher defaultMode="light" />
 <Toaster />
 
 <!-- position: fixed elements can go outside if needed -->
-
-<style>
-	/* The wrapper serves as the viewport */
-	#smooth-wrapper {
-		overflow: hidden;
-		position: fixed;
-		height: 100%;
-		width: 100%;
-		top: 0;
-		left: 0;
-	}
-</style>

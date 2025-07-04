@@ -6,7 +6,7 @@
 
 	const messages = {
 		greeting: 'Xin chào, mình là',
-		name: 'Tuấn Anh Lương',
+		name: 'Lương Tuấn Anh',
 		tagline:
 			'Mình không chỉ code, mình xây dựng trải nghiệm - nơi ý tưởng trở thành sản phẩm có mục đích',
 		description:
@@ -80,7 +80,7 @@
 				<div class="flex aspect-square items-center justify-center rounded-2xl lg:aspect-[4/5]">
 					<img
 						src="/imgs/logo.svg"
-						alt="Tuấn Anh Lương Logo"
+						alt="Lương Tuấn Anh Logo"
 						class="h-full w-full rounded-2xl object-contain"
 					/>
 				</div>

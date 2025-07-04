@@ -1,0 +1,141 @@
+---
+title: Svelte 5 + Sveltekit - Lựa chọn hoàn hảo để thay thế React/Next.js
+description: React/Next.js từ lâu đã là lựa chọn mặc định của rất nhiều lập trình viên khi bắt đầu một dự án web app. Nhưng trong thế giới frontend luôn thay đổi, liệu đây còn là giải pháp tối ưu nhất hiện nay?
+created: 2025-07-04
+updated: null
+categories:
+  - Svelte 5
+  - SvelteKit
+  - React
+  - Next.js
+  - Coding
+published: true
+---
+
+## Table of contents
+
+## Giới thiệu
+
+React/Next.js từ lâu đã là combo "quốc dân" đối với nhiều lập trình viên. Tuy nhiên, kể từ khi Svelte 5 ra mắt, mình bắt đầu tự hỏi: liệu React có còn là lựa chọn tối ưu nhất cho mọi dự án nữa không?
+
+Sau khoảng gần 1 năm trải nghiệm Svelte 5 kết hợp với SvelteKit, mình thật sự bất ngờ với những gì nó mang lại. Và trong bài viết này, mình muốn chia sẻ góc nhìn cá nhân về lý do vì sao Svelte có thể là một lựa chọn đáng cân nhắc cho dự án tiếp theo của bạn.
+
+Tất nhiên, đây chỉ là **quan điểm cá nhân**. Việc lựa chọn tech stack nào là “tối ưu” còn tùy thuộc vào mục tiêu dự án và sự quen thuộc của team đối với tech stack đó. Không có công cụ nào hoàn hảo tuyệt đối – chỉ có công cụ phù hợp nhất với bạn ở thời điểm hiện tại.
+## So sánh nhanh: React/Next.js và Svelte 5 + SvelteKit
+
+### React / Next.js
+
+**Ưu điểm:**
+
+- Hệ sinh thái rất lớn, gần như có thư viện cho mọi nhu cầu.
+- Cộng đồng đông đảo, dễ tìm tài liệu, bài hướng dẫn và câu trả lời.
+- Phù hợp với các dự án lớn, có cấu trúc rõ ràng, dễ scale với team đông.
+- Next.js hỗ trợ mạnh mẽ SSR, SSG, ISR, API routes, tối ưu hình ảnh...
+
+**Nhược điểm:**
+
+- Cần dùng nhiều hook như `useState`, `useEffect`, `useMemo`... cho các logic cơ bản.
+- JSX không thật sự giống HTML, gây khó chịu cho người mới bắt đầu.
+- Virtual DOM có overhead, đặc biệt với ứng dụng lớn.
+- Càng lớn càng dễ rối, dễ dính "hook hell", khó debug.
+
+### Svelte 5 + SvelteKit
+
+**Ưu điểm:**
+
+- Cú pháp gần với HTML thật, dễ viết, ít boilerplate.
+- Không dùng Virtual DOM → hiệu năng cao, bundle nhỏ.
+- SvelteKit tích hợp sẵn SSR, routing, form action, endpoints... không cần setup nhiều.
+- Reactive mặc định, không cần hook hay state management phức tạp.
+- Trải nghiệm lập trình rất trực quan, tập trung vào logic thay vì cấu hình.
+- Đặc biệt là learning curve cực kì ngắn, đặc biệt là khi bạn đã quen sử dụng các JS Framework khác.
+
+**Nhược điểm:**
+
+- Hệ sinh thái của Svelte không lớn như React.
+- Ít job hơn so với React, đặc biệt trong môi trường doanh nghiệp.
+
+## Tại sao mình chuyển sang Svelte?
+
+Sau thời gian dài làm việc với React và Next.js, mình bắt đầu cảm thấy mệt mỏi với việc phải xử lý quá nhiều boilerplate và hook chỉ để làm những thứ đơn giản.
+
+Những thứ như quản lý state, xử lý side effect hay tối ưu re-render đôi khi khiến mình cảm giác đang đánh vật với chính framework thay vì tập trung vào logic của sản phẩm.
+
+Khi thử Svelte 5 và SvelteKit, mình nhận ra mọi thứ trở nên nhẹ nhàng hơn rất nhiều. Không cần sử dụng quá nhiều hooks, Svelte xử lý theo cách tự nhiên và rõ ràng hơn.
+
+>Thay vì phải học cách “đi vòng” (workaround), mình chỉ cần viết đúng thứ mình muốn trình bày.
+
+Bên cạnh đó, mình cũng thấy rõ hiệu năng được cải thiện đáng kể, nhất là ở những project nhỏ đến vừa. Việc không cần runtime nặng nề giúp website load nhanh hơn, mượt hơn mà không cần tối ưu quá nhiều.
+
+Cuối cùng, cảm giác code với Svelte rất... tuyệt vời. Mọi thứ gọn gàng, ít lặp lại, và giúp mình tập trung đúng vào phần quan trọng nhất: **Trải nghiệm người dùng**.
+
+## Tính năng nổi bật của Svelte 5
+
+Svelte 5 giới thiệu nhiều cải tiến giúp việc viết web app trở nên gọn gàng và hiệu quả hơn, đặc biệt là với hệ thống runes mới.
+
+### Runes – Reactive dễ hiểu hơn
+
+- `$state`: Tạo biến reactive đơn giản, không cần store hay hook.
+- `$derived`: Tạo biến phụ thuộc vào 1 biến khác.
+- `$effect`: Theo dõi thay đổi và chạy side effect (thay cho `useEffect` trong React).
+- `$props`: Truy cập props truyền vào trong component.
+- `$bindable`: Cho phép binding 2 chiều cho props – rất tiện cho các input component.
+
+### Snippets – Tái sử dụng giao diện
+
+Giúp định nghĩa và render các đoạn template có thể tái sử dụng.
+
+Khác với Components ở chỗ Snippets chỉ sử dụng được trong 1 components (trừ khi được truyền đi).
+
+### Error boundary
+
+Svelte 5 hỗ trợ bắt lỗi giao diện với `<svelte:boundary>`, giúp tránh crash toàn bộ app khi có lỗi ở một phần nhỏ.
+### SvelteKit – Framework tích hợp sẵn
+
+Không giống như React, phải phụ thuộc vào các bên thứ 3 xây dựng framework (đôi khi dẫn đến xung đột, outdate,...) SvelteKit được xây dựng bởi chính Svelte Team.
+
+- Routing dựa trên cấu trúc thư mục (`+page.svelte`, `+layout.svelte`, `+server.js`...)
+- Hỗ trợ SSR, SSG, form action, load data... tất cả built-in
+- Progressive enhancement cho form với `use:enhance`
+- Cấu hình dễ dàng cho prerender, CSR, SSR tùy nhu cầu
+
+Tóm lại, Svelte 5 + SvelteKit mang lại trải nghiệm dev rất nhẹ nhàng, dễ hiểu, và giúp bạn tập trung vào logic sản phẩm thay vì setup framework.
+
+## Còn về thư viện, ecosystem thì sao?
+
+Đây là một trong những câu hỏi thường gặp nhất khi nhắc đến Svelte. So với React, hệ sinh thái của Svelte đúng là nhỏ hơn chút, một số thư viện chưa có bản native.
+
+Tuy nhiên, điều đó không có nghĩa là bạn sẽ bị giới hạn. Vì Svelte được compile thành JavaScript thuần, nên bạn hoàn toàn có thể sử dụng các thư viện viết cho JS thuần cho Svelte.
+
+Trên thực tế, hầu hết các thư viện quan trọng như form validation, animation, date/time, chart... đều đã có giải pháp dùng tốt với Svelte.
+
+Về cộng đồng, nếu để so sánh với React thì Svelte cũng không kém cạnh gì, tất nhiên có nhỏ hơn chút nhưng đổi lại là họ cực kì active.
+
+Về UI framework, hiện tại Svelte đã có nhiều lựa chọn khá ổn như Skeleton, Flowbite-Svelte, hay Smelte.
+
+Nếu bạn quen thuộc với ShadCN trong hệ sinh thái React, thì cũng đã có phiên bản port lại cho Svelte mang tên `shadcn/svelte`, với cách dùng và component gần như giống hệt – rất tiện để làm quen hoặc chuyển đổi.
+
+Tóm lại, dù Svelte chưa có ecosystem khổng lồ như React, nhưng cũng đã đủ mạnh để bạn làm được hầu hết mọi thứ – từ landing page đơn giản đến web app phức tạp.
+
+## Khi nào nên dùng Svelte + SvelteKit?
+
+- Khi bạn muốn tập trung vào phát triển tính năng thay vì cấu hình framework.
+- Khi cần một framework đơn giản, dễ tiếp cận nhưng vẫn mạnh mẽ, đặc biệt phù hợp cho solo dev, freelancer, hoặc team nhỏ.
+- Khi làm các sản phẩm cần tối ưu tốc độ tải trang.
+- Khi bạn muốn viết ít code hơn nhưng vẫn đạt được kết quả tương đương (hoặc tốt hơn) so với React.
+- Khi bạn muốn trải nghiệm reactive theo hướng “trực quan” và thoát khỏi sự phức tạp của hook, context, memo, v.v.
+
+## Khi nào KHÔNG nên dùng?
+
+- Khi dự án yêu cầu tích hợp thư viện hoặc SDK phức tạp mà chỉ hỗ trợ React.
+- Khi bạn đang làm việc trong hệ sinh thái đã ổn định với React, có sẵn quy trình, CI/CD, component system, và nhiều dev cùng tham gia.
+- Khi yêu cầu tuyển dụng và mở rộng team là yếu tố quan trọng, vì thị trường vẫn đang chuộng React hơn.
+- Khi bạn là Dev và cần tìm job =)) (Thực tế Svelte ở Việt Nam vẫn còn khá mới mẻ, ít công ty tuyển dụng)
+- Khi dự án yêu cầu khả năng mở rộng cực lớn, cần sự hỗ trợ lâu dài từ một ecosystem siêu mạnh và cộng đồng enterprise.
+## Tổng kết
+
+Svelte 5 và SvelteKit không chỉ là một lựa chọn thay thế cho React/Next.js mà còn là một cách tiếp cận mới mẻ, tối giản và hiệu quả hơn trong phát triển web hiện đại. Với cú pháp gần gũi, hiệu năng cao và trải nghiệm lập trình mượt mà, Svelte giúp bạn tập trung vào điều quan trọng nhất: xây dựng sản phẩm có giá trị.
+
+Tất nhiên, không có công nghệ nào là hoàn hảo cho mọi tình huống. React vẫn là một lựa chọn vững chắc trong nhiều trường hợp, đặc biệt khi bạn cần đến sự hậu thuẫn từ một hệ sinh thái lớn và cộng đồng đông đảo.
+
+Nhưng nếu bạn đang tìm kiếm một hướng đi nhẹ nhàng hơn, code ít hơn mà vẫn làm được nhiều hơn, thì có thể đã đến lúc thử Svelte.
