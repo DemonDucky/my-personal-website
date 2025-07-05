@@ -10,6 +10,9 @@
 	import { ModeWatcher } from 'mode-watcher';
 	import { onMount } from 'svelte';
 	import '../app.css';
+	import 'nprogress/nprogress.css';
+	import NProgress from 'nprogress';
+	import { afterNavigate, beforeNavigate } from '$app/navigation';
 	let { children } = $props();
 
 	onMount(() => {
@@ -25,6 +28,16 @@
 			effects: true // looks for data-speed and data-lag attributes on elements
 			// smoothTouch: 0.1 // much shorter smoothing time on touch devices,
 		});
+	});
+
+	NProgress.configure({ showSpinner: false });
+
+	beforeNavigate(() => {
+		NProgress.start();
+	});
+
+	afterNavigate(() => {
+		NProgress.done();
 	});
 
 	const siteUrl = 'https://luongtuananh.com';
