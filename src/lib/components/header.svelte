@@ -3,19 +3,50 @@
 	import List from 'phosphor-svelte/lib/List';
 	import X from 'phosphor-svelte/lib/X';
 	import DarkModeButton from './dark-mode-button.svelte';
-
+	import { getLocale, setLocale } from '$lib/paraglide/runtime.js';
+	import { page } from '$app/state';
+	import type { Language, Translation } from '$lib/types/post';
+	import { localizeAndRemoveEndTrailingSlash } from '$lib/utils';
+	import { m } from '$lib/paraglide/messages';
 	let isOpen = $state(false);
+	let currentLocale = $state(getLocale());
 
 	const toggleMenu = () => {
 		isOpen = !isOpen;
 	};
 
+	const switchLanguage = () => {
+		const newLocale: Language = currentLocale === 'en' ? 'vi' : 'en';
+		const translations = page.data.translations as Translation[];
+
+		const newHref = translations && translations.find((translation) => newLocale in translation);
+
+		if (newHref) {
+			const segments = page.url.pathname.split('/');
+			segments[segments.length - 1] = newHref[newLocale];
+			const localizedHref = localizeAndRemoveEndTrailingSlash(segments.join('/'), {
+				locale: newLocale
+			});
+			window.location.href = localizedHref;
+		} else {
+			setLocale(newLocale);
+			currentLocale = newLocale;
+		}
+	};
+
 	const messages = {
-		menu: 'Menu',
-		close: 'Đóng menu',
-		contact: 'Liên hệ',
+		menu: m.yummy_next_finch_beam(),
+		close: m.muddy_teal_salmon_embrace(),
+		contact: m.mean_bland_mantis_build(),
 		blogs: 'Blogs',
-		home: 'Trang chủ'
+		home: m.basic_even_bison_find(),
+		switchLanguage: m.agent_nice_toucan_dart(),
+		name: 'Lương Tuấn Anh'
+	};
+
+	const languageConfig = {
+		en: { flag: '🌐', name: 'English' },
+		vi: { flag: '🇻🇳', name: 'Tiếng Việt' }
 	};
 
 	const navLinks: Record<string, { href: string; label: string; variant: ButtonVariant }> = {
@@ -42,10 +73,10 @@
 >
 	<div class="container mx-auto flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8">
 		<!-- Logo -->
-		<a href="/" class="flex items-center gap-2">
+		<Button variant="link" href="/" class="flex items-center gap-2 hover:no-underline">
 			<img src="/imgs/logo.svg" alt="Logo" class="h-10 w-auto" />
-			<span class="text-sm">Lương Tuấn Anh</span>
-		</a>
+			<span class="hidden text-sm sm:block">{messages.name}</span>
+		</Button>
 
 		<!-- Desktop Navigation -->
 		<nav class="hidden items-center gap-6 md:flex">
@@ -54,11 +85,27 @@
 					{link.label}
 				</Button>
 			{/each}
+			<button
+				onclick={switchLanguage}
+				class="hover:bg-accent hover:text-accent-foreground flex items-center gap-2 rounded-md px-3 py-2 text-sm transition-colors"
+				aria-label={messages.switchLanguage}
+				title={languageConfig[currentLocale === 'en' ? 'vi' : 'en'].name}
+			>
+				<span class="text-lg">{languageConfig[currentLocale].flag}</span>
+			</button>
 			<DarkModeButton />
 		</nav>
 
 		<!-- Mobile Menu Button -->
 		<div class="flex items-center gap-6 md:hidden">
+			<button
+				onclick={switchLanguage}
+				class="hover:bg-accent hover:text-accent-foreground flex items-center gap-2 rounded-md px-2 py-1 text-sm transition-colors"
+				aria-label={messages.switchLanguage}
+				title={languageConfig[currentLocale === 'en' ? 'vi' : 'en'].name}
+			>
+				<span class="text-lg">{languageConfig[currentLocale].flag}</span>
+			</button>
 			<DarkModeButton />
 			<button
 				onclick={(e) => {

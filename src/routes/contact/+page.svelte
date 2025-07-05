@@ -1,34 +1,33 @@
 <script lang="ts">
 	import BreadcrumbContainer from '$lib/components/breadcrumb-container.svelte';
 	import CtaFormSection from '$lib/components/cta-form-section.svelte';
+	import { m } from '$lib/paraglide/messages';
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();
 
 	const messages = {
-		title: 'Liên hệ - Lương Tuấn Anh',
-		contact: 'Liên hệ',
-		description:
-			'Liên hệ với mình để thảo luận về dự án web development, marketing digital, hay bất kỳ ý tưởng nào bạn muốn thực hiện. Phản hồi trong vòng 24 giờ.',
-		breadcrumbHome: 'Trang chủ',
-		breadcrumbContact: 'Liên hệ',
+		title: m.any_curly_fireant_empower(),
+		contact: m.lower_bad_albatross_hush(),
+		description: m.honest_tired_albatross_treasure(),
+		breadcrumbHome: m.agent_odd_orangutan_nudge(),
+		breadcrumbContact: m.lower_bad_albatross_hush(),
 		suitableProjects: {
-			title: 'Các Dự Án Phù Hợp',
+			title: m.teal_plain_felix_adore(),
 			projectList: [
-				'Thiết kế và lập trình website giới thiệu cho cá nhân/doanh nghiệp nhỏ',
-				'Tạo landing page tập trung chuyển đổi cho sản phẩm hoặc dịch vụ',
-				'Xây dựng blog cá nhân hỗ trợ viết nội dung, tối ưu SEO, đa ngôn ngữ',
-				'Phát triển web app đơn giản: quản lý sự kiện, booking, form đăng ký,...',
-				'Thiết kế trang tương tác như mini game, khảo sát, form marketing',
-				'Tối ưu tốc độ, giao diện và trải nghiệm người dùng cho website hiện tại',
-				'Viết nội dung, tối ưu SEO và triển khai các chiến dịch marketing nhỏ',
-				'Tư vấn cấu trúc website, hành trình người dùng và định hướng nội dung',
-				'Thiết lập hệ thống đo lường: Google Analytics, Tag Manager, Pixel,...',
-				'Thiết kế giao diện đơn giản, dễ dùng, phù hợp với mục tiêu thương hiệu'
+				m.zesty_close_cuckoo_cure(),
+				m.elegant_home_earthworm_sail(),
+				m.house_vexed_swallow_trip(),
+				m.odd_game_toad_aid(),
+				m.green_calm_mantis_sprout(),
+				m.kind_watery_cockroach_drum(),
+				m.raw_patient_piranha_hint(),
+				m.awful_cozy_sloth_list(),
+				m.weird_happy_pig_twist(),
+				m.round_happy_niklas_amaze()
 			]
 		},
-		keywords:
-			'liên hệ, web developer, marketing executive, dự án web, phát triển website, thiết kế website, tối ưu SEO, triển khai marketing, hệ thống đo lường, giao diện đơn giản, dễ dùng, phù hợp với mục tiêu thương hiệu'
+		keywords: m.teal_bright_marmot_pop()
 	};
 
 	// Structured data for contact page
@@ -85,13 +84,13 @@
 <!-- Suitable Projects Section -->
 <section class="container mx-auto px-6 py-8" aria-label="Suitable Projects">
 	<div class="mx-auto max-w-4xl">
-		<h1 class="text-foreground mb-8 text-3xl font-bold lg:text-5xl">
+		<h1 class="text-foreground mb-8 text-center text-3xl font-bold lg:text-5xl">
 			{messages.suitableProjects.title}
 		</h1>
 
 		<ul class="space-y-4">
 			{#each messages.suitableProjects.projectList as project}
-				<li class="flex items-start">
+				<li class="flex w-full items-center">
 					<span class="text-primary mt-1 mr-3">•</span>
 					<span class="text-base leading-relaxed">{project}</span>
 				</li>

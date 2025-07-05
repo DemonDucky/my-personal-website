@@ -3,20 +3,22 @@
 	import { Badge } from '$lib/components/ui/badge/index.js';
 	import { Card, CardContent, CardHeader, CardTitle } from '$lib/components/ui/card/index.js';
 	import ThreeDash from '$lib/components/ui/decoration/three-dash.svelte';
+	import { m } from '$lib/paraglide/messages';
 
 	const messages = {
-		sectionTitle: 'Dự án nổi bật',
+		sectionTitle: m.inclusive_formal_martin_loop(),
 		projectName: 'Amorees',
-		tagline: 'Kết nối cảm xúc qua công nghệ',
-		description:
-			'Amorees - Linklove  là một nền tảng kết nối cặp đôi độc đáo, nơi công nghệ NFC biến những món quà nhỏ thành cầu nối cảm xúc. Với sản phẩm LinkLove, chúng mình tạo ra một không gian riêng tư đầy kỷ niệm, nơi mỗi lần chạm là một lần kể lại câu chuyện tình yêu.',
+		tagline: m.salty_careful_kudu_twist(),
+		description: m.last_lime_gadfly_spark(),
 		features: [
-			'Quét LinkLove tag để mở ra không gian riêng tư của bạn và người yêu.',
-			'Lưu giữ hình ảnh, nhật ký, kỷ niệm chỉ hai người mới xem được.',
-			'Không công khai như mạng xã hội, không bị làm phiền.'
+			m.formal_long_parakeet_coax(),
+			m.watery_such_turtle_grin(),
+			m.due_funny_okapi_trust()
 		],
 		technologies: ['SvelteKit', 'TypeScript', 'TailwindCSS', 'PocketBase', 'NFC Technology'],
-		ctaText: 'Xem chi tiết dự án'
+		ctaText: m.loved_spare_camel_hint(),
+		featuresTitle: m.slow_any_turkey_file(),
+		technologiesTitle: m.long_this_mayfly_drop()
 	};
 </script>
 
@@ -57,13 +59,13 @@
 				</h3>
 
 				<!-- Description -->
-				<p class="text-muted-foreground text-lg leading-relaxed">
+				<p class="text-lg leading-relaxed">
 					{messages.description}
 				</p>
 
 				<!-- Features -->
 				<div class="space-y-4">
-					<h4 class="text-lg font-semibold">Tính năng nổi bật</h4>
+					<h4 class="text-lg font-semibold">{messages.featuresTitle}</h4>
 					<div class="space-y-4">
 						{#each messages.features as feature, index}
 							<div class="flex items-center space-x-3">
@@ -82,7 +84,7 @@
 
 				<!-- Technologies -->
 				<div class="space-y-4">
-					<h4 class="text-lg font-semibold">Công nghệ sử dụng</h4>
+					<h4 class="text-lg font-semibold">{messages.technologiesTitle}</h4>
 					<div class="flex flex-wrap gap-2">
 						{#each messages.technologies as tech}
 							<Badge class="text-sm" variant="outline">

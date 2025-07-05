@@ -3,6 +3,7 @@
 	import { Badge } from '$lib/components/ui/badge';
 	import Calendar from 'phosphor-svelte/lib/Calendar';
 	import Clock from 'phosphor-svelte/lib/Clock';
+	import { m } from '$lib/paraglide/messages';
 
 	interface Props {
 		post: Post;
@@ -11,9 +12,9 @@
 	let { post }: Props = $props();
 
 	const messages = {
-		publishedOn: 'Xuất bản vào',
-		updatedOn: 'Cập nhật lần cuối',
-		readingTime: 'phút đọc'
+		publishedOn: m.early_stock_dingo_scoop(),
+		updatedOn: m.calm_ago_weasel_transform(),
+		readingTime: m.north_hour_larva_walk()
 	};
 
 	const formatDate = (dateString: string) => {

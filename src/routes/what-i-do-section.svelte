@@ -1,28 +1,28 @@
 <script lang="ts">
 	import { Card, CardContent, CardHeader } from '$lib/components/ui/card/index.js';
 	import ThreeDash from '$lib/components/ui/decoration/three-dash.svelte';
+	import { m } from '$lib/paraglide/messages';
+	import Check from 'phosphor-svelte/lib/Check';
 
 	const messages = {
-		sectionTitle: 'Vậy mình thực sự làm gì?',
-		description: [
-			'Mình hoạt động ở vùng giao thoa giữa lập trình và marketing – nơi ý tưởng được dựng nên thành trải nghiệm, và trải nghiệm được kể thành câu chuyện thương hiệu.'
-		],
+		sectionTitle: m.muddy_calm_dog_dig(),
+		description: [m.watery_dull_racoon_clip()],
 		devSide: {
 			title: 'Dev Side',
 			skills: [
-				'Thiết kế và phát triển ứng dụng web fullstack hiện đại với SvelteKit & TypeScript',
-				'Tối ưu hiệu suất, bảo mật, SEO và tuân thủ chuẩn accessibility (a11y)',
-				'Tích hợp dịch vụ backend hiện đại như PocketBase, Supabase, RESTful & GraphQL APIs',
-				'Xây dựng UI động, trải nghiệm mượt mà, quản lý state rõ ràng và dễ bảo trì'
+				m.fancy_orange_husky_build(),
+				m.smart_loved_panda_slurp(),
+				m.frail_patchy_otter_launch(),
+				m.keen_wacky_turtle_bake()
 			]
 		},
 		marketingSide: {
 			title: 'Brand & Marketing Side',
 			skills: [
-				'Định vị thương hiệu, xây dựng ngôn ngữ & hình ảnh nhất quán',
-				'Viết và tối ưu landing page để tăng chuyển đổi và trải nghiệm người dùng',
-				'Phát triển concept truyền thông & nội dung gắn liền với giá trị sản phẩm',
-				'Kết nối cảm xúc, tạo động lực mua hàng bằng storytelling và hiểu rõ insight khách hàng'
+				m.key_formal_emu_type(),
+				m.smart_inner_warthog_endure(),
+				m.known_due_lobster_belong(),
+				m.just_lower_gecko_hike()
 			]
 		}
 	};
@@ -57,17 +57,7 @@
 					{#each messages.devSide.skills as skill}
 						<li class="flex items-start space-x-3">
 							<div class="text-primary flex-shrink-0 pt-1">
-								<svg
-									xmlns="http://www.w3.org/2000/svg"
-									width="18"
-									height="18"
-									viewBox="0 0 24 24"
-									fill="none"
-									stroke="currentColor"
-									stroke-width="2"
-									stroke-linecap="round"
-									stroke-linejoin="round"><polyline points="20 6 9 17 4 12" /></svg
-								>
+								<Check size={18} />
 							</div>
 							<p>{skill}</p>
 						</li>
@@ -88,17 +78,7 @@
 					{#each messages.marketingSide.skills as skill}
 						<li class="flex items-start space-x-3">
 							<div class="text-primary flex-shrink-0 pt-1">
-								<svg
-									xmlns="http://www.w3.org/2000/svg"
-									width="18"
-									height="18"
-									viewBox="0 0 24 24"
-									fill="none"
-									stroke="currentColor"
-									stroke-width="2"
-									stroke-linecap="round"
-									stroke-linejoin="round"><polyline points="20 6 9 17 4 12" /></svg
-								>
+								<Check size={18} />
 							</div>
 							<p>{skill}</p>
 						</li>

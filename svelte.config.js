@@ -4,12 +4,20 @@ import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 import { createHighlighter } from 'shiki';
 import { escapeSvelte } from 'mdsvex';
 import remarkToc from 'remark-toc';
+import rehypeSlug from 'rehype-slug';
 
 const theme = 'github-dark';
 const highlighter = await createHighlighter({
 	themes: [theme],
 	langs: ['javascript', 'typescript']
 });
+
+const dualToc = () => async (tree, file) => {
+	// Run once for "table of contents"
+	await remarkToc({ heading: 'table of contents' })(tree, file);
+	// Run again for "mục lục"
+	await remarkToc({ heading: 'mục lục' })(tree, file);
+};
 
 /**
  * @typedef {Object} MdsvexOptions
@@ -28,7 +36,8 @@ const mdsvexOptions = {
 			return `{@html \`${html}\` }`;
 		}
 	},
-	remarkPlugins: [remarkToc]
+	remarkPlugins: [dualToc],
+	rehypePlugins: [rehypeSlug]
 };
 
 /** @type {import('@sveltejs/kit').Config} */

@@ -12,7 +12,8 @@
 	import '../app.css';
 	import 'nprogress/nprogress.css';
 	import NProgress from 'nprogress';
-	import { afterNavigate, beforeNavigate } from '$app/navigation';
+	import { afterNavigate, beforeNavigate, pushState } from '$app/navigation';
+	import Footer from '$lib/components/footer.svelte';
 	let { children } = $props();
 
 	onMount(() => {
@@ -41,21 +42,51 @@
 	});
 
 	const siteUrl = 'https://luongtuananh.com';
+
+	// Method 1: Stop default anchor behavior
+	function handleHashChange(e: MouseEvent) {
+		const anchor = (e.target as HTMLElement)?.closest?.('a[href^="#"]');
+		if (!anchor) return;
+
+		const href = anchor.getAttribute('href');
+		if (!href || href === '#') return;
+
+		let targetSelector: string;
+		try {
+			targetSelector = decodeURIComponent(href);
+		} catch (err) {
+			console.warn('Invalid anchor href:', href, err);
+			return;
+		}
+
+		const target = document.querySelector(targetSelector);
+		if (!target) {
+			console.warn('Target not found for selector:', targetSelector);
+			return;
+		}
+
+		e.preventDefault(); // Only prevent if we’re actually scrolling
+		ScrollSmoother.get()?.scrollTo(target, true, 'top top+=64px');
+	}
 </script>
 
+<svelte:document on:click={handleHashChange} />
+
 <svelte:head>
-	{#each locales as locale}
+	{#if !page.url.pathname.match(/^\/blogs\/[^\/]+$/) && !page.url.pathname.match(/^\/[a-z]{2}\/blogs\/[^\/]+$/)}
+		{#each locales as locale}
+			<link
+				rel="alternate"
+				href={siteUrl + localizeAndRemoveEndTrailingSlash(page.url.pathname, { locale })}
+				hreflang={locale}
+			/>
+		{/each}
 		<link
 			rel="alternate"
-			href={siteUrl + localizeAndRemoveEndTrailingSlash(page.url.pathname, { locale })}
-			hreflang={locale}
+			href={siteUrl + localizeAndRemoveEndTrailingSlash(page.url.pathname, { locale: 'en' })}
+			hreflang="x-default"
 		/>
-	{/each}
-	<link
-		rel="alternate"
-		href={siteUrl + localizeAndRemoveEndTrailingSlash(page.url.pathname, { locale: 'en' })}
-		hreflang="x-default"
-	/>
+	{/if}
 	<link rel="canonical" href={siteUrl + localizeAndRemoveEndTrailingSlash(page.url.pathname)} />
 
 	<meta property="og:locale" content="vi_VN" />
@@ -77,6 +108,7 @@
 		<main class="bg-background text-foreground min-h-screen pt-16">
 			{@render children()}
 		</main>
+		<Footer />
 	</div>
 </div>
 <ModeWatcher defaultMode="light" />

@@ -5,13 +5,18 @@
 	import BlogPostHeader from './blog-post-header.svelte';
 	import BlogPostOutdatedWarning from './blog-post-outdated-warning.svelte';
 	import BlogPostAuthorCard from './blog-post-author-card.svelte';
+	import { page } from '$app/state';
+	import { m } from '$lib/paraglide/messages';
 
 	let { data }: { data: PageData } = $props();
 
 	const messages = {
-		breadcrumbHome: 'Trang chủ',
+		breadcrumbHome: m.polite_clear_pig_evoke(),
 		breadcrumbBlogs: 'Blogs'
 	};
+
+	page.data.originalUrl = page.url.pathname;
+	page.data.translations = data.post.translations;
 
 	const formatDateISO = (dateString: string) => {
 		const date = new Date(dateString);

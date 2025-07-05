@@ -4,18 +4,18 @@
 	import type { Post, Categories } from '$lib/types/post';
 	import Tag from 'phosphor-svelte/lib/Tag';
 	import Article from 'phosphor-svelte/lib/Article';
+	import { m } from '$lib/paraglide/messages';
 
 	interface Props {
 		categories: Categories[];
 		recentPosts: Post[];
-		onNavigateToPost: (slug: string) => void;
 	}
 
-	let { categories, recentPosts, onNavigateToPost }: Props = $props();
+	let { categories, recentPosts }: Props = $props();
 
 	const messages = {
-		categories: 'Danh mục',
-		recentPosts: 'Bài viết gần đây'
+		categories: m.fuzzy_cozy_rabbit_relish(),
+		recentPosts: m.game_funny_tapir_mend()
 	};
 
 	const formatDate = (dateString: string) => {
@@ -58,15 +58,15 @@
 		</CardHeader>
 		<CardContent class="space-y-4">
 			{#each recentPosts as post}
-				<button
-					onclick={() => onNavigateToPost(post.slug)}
-					class="hover:bg-accent text-foreground hover:text-primary line-clamp-2 w-full cursor-pointer space-y-2 rounded-lg px-4 py-2 text-left text-sm leading-tight font-medium transition-colors"
+				<a
+					href="/blogs/{post.slug}"
+					class="hover:bg-accent text-foreground hover:text-primary line-clamp-2 block cursor-pointer space-y-2 rounded-lg px-4 py-2 text-left text-sm leading-tight font-medium transition-colors"
 				>
 					{post.title}
 					<div class="text-muted-foreground text-xs">
 						{formatDate(post.updated || post.created)}
 					</div>
-				</button>
+				</a>
 			{/each}
 		</CardContent>
 	</Card> -->

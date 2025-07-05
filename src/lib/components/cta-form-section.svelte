@@ -10,25 +10,25 @@
 	import { superForm, type SuperValidated, type Infer } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import { toast } from 'svelte-sonner';
+	import { m } from '$lib/paraglide/messages';
 
 	const messages = {
-		sectionTitle: 'Bạn có dự án cần phát triển?',
-		description:
-			'Hãy chia sẻ ý tưởng của bạn và mình sẽ liên hệ lại trong vòng 24 giờ để thảo luận thêm về cách chúng ta có thể hợp tác.',
-		cardTitle: 'Liên hệ với mình',
-		nameLabel: 'Tên của bạn',
-		namePlaceholder: 'Nhập tên của bạn',
+		sectionTitle: m.bold_alert_toucan_twirl(),
+		description: m.top_agent_cod_intend(),
+		cardTitle: m.helpful_witty_cockroach_treat(),
+		nameLabel: m.sleek_zany_shrimp_favor(),
+		namePlaceholder: m.antsy_knotty_fly_taste(),
 		emailLabel: 'Email',
 		emailPlaceholder: 'email@example.com',
-		projectNameLabel: 'Tên dự án',
-		projectNamePlaceholder: 'Nhập tên dự án của bạn',
-		projectLabel: 'Mô tả ngắn về dự án',
-		projectPlaceholder: 'Mô tả ngắn về dự án của bạn...',
-		submitText: 'Gửi yêu cầu',
-		submitting: 'Đang gửi...',
-		thankYouMessage: 'Gửi thành công. Cảm ơn bạn đã liên hệ! Mình sẽ phản hồi sớm nhất có thể.',
-		privacyNote:
-			'Mình luôn tôn trọng quyền riêng tư của bạn và chỉ sử dụng thông tin này để liên hệ về dự án.'
+		projectNameLabel: m.flaky_any_mink_pave(),
+		projectNamePlaceholder: m.gaudy_key_termite_vent(),
+		projectLabel: m.honest_careful_elk_drum(),
+		projectPlaceholder: m.big_front_cow_roar(),
+		submitText: m.blue_spare_termite_imagine(),
+		submitting: m.lazy_mad_lynx_sew(),
+		thankYouMessage: m.fluffy_trick_tiger_drip(),
+		privacyNote: m.tiny_inner_bear_sprout(),
+		taintedMessage: m.weary_seemly_mayfly_support()
 	};
 
 	let { contactForm }: { contactForm: SuperValidated<Infer<ContactFormSchema>> } = $props();
@@ -37,12 +37,11 @@
 
 	const form = superForm(contactForm, {
 		validators: zodClient(contactFormSchema),
-		taintedMessage: 'Vui lòng điền đầy đủ thông tin',
+		taintedMessage: messages.taintedMessage,
 		multipleSubmits: 'prevent',
 		onUpdated({ form }) {
 			if (form.valid) {
 				submitted = true;
-				console.log(submitted);
 				toast.success(messages.thankYouMessage, { position: 'top-center' });
 			}
 		}

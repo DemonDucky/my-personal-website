@@ -1,27 +1,25 @@
 <script lang="ts">
 	import { Badge } from '$lib/components/ui/badge/index.js';
 	import { Card, CardContent } from '$lib/components/ui/card/index.js';
+	import { m } from '$lib/paraglide/messages';
 
 	const messages = {
-		sectionTitle: 'Về mình',
-		intro: 'Mình đến với công nghệ không phải từ những dòng lệnh, mà từ một câu hỏi:',
-		motivation: 'Sẽ ra sao nếu một ý tưởng nhỏ thôi… có thể khiến ai đó mỉm cười?',
-		background:
-			'Từ câu hỏi ấy, mình rẽ lối khỏi marketing truyền thống và bước vào một thế giới nơi những đoạn code, component và trải nghiệm người dùng trở thành cách mình kể chuyện, kết nối và tạo ra cảm xúc.',
+		sectionTitle: m.swift_safe_gopher_tap(),
+		intro: m.raw_cuddly_gecko_roar(),
+		motivation: m.gray_big_panda_radiate(),
+		background: m.direct_yummy_goldfish_adore(),
 		firstProject: {
-			title: 'Dự án đầu tiên',
-			description:
-				'Dự án đầu tiên của mình là một sản phẩm kết nối cặp đôi – nơi một món quà nhỏ gắn chip NFC có thể mở ra cả một không gian riêng tư đầy kỷ niệm.',
-			impact: 'Không phải sản phẩm triệu đô, nhưng nó dạy mình ba điều quan trọng:'
+			title: m.due_novel_loris_fade(),
+			description: m.upper_mad_skate_lend(),
+			impact: m.whole_lofty_larva_fall()
 		},
 		lessons: [
-			'Cách khiến sản phẩm xuất hiện đúng lúc và kể được điều nó muốn nói',
-			'Cách làm frontend và backend hòa nhịp, như một đoạn hội thoại ăn ý',
-			'Và quan trọng nhất: cách để sản phẩm không chỉ chạy mà còn được sống'
+			m.known_equal_termite_talk(),
+			m.free_still_rooster_bless(),
+			m.plain_few_midge_bubble()
 		],
-		currentFocus:
-			'Từ đó đến nay, mình tiếp tục đi sâu hơn vào clean code, kiến trúc phần mềm, và những điều khó đo lường nhưng luôn quan trọng:',
-		focusAreas: ['Nhịp cảm xúc', 'Flow trải nghiệm', 'Lý do người dùng quay lại']
+		currentFocus: m.icy_last_dingo_slurp(),
+		focusAreas: [m.born_spry_midge_aid(), m.mushy_wise_shad_evoke(), m.ok_trite_maggot_talk()]
 	};
 </script>
 

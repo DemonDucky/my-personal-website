@@ -10,9 +10,11 @@ categories:
   - Next.js
   - Coding
 published: true
+translations:
+  - en: svelte-5-sveltekit-the-perfect-alternative-to-react-nextjs
 ---
 
-## Table of contents
+## Mục lục
 
 ## Giới thiệu
 

@@ -3,15 +3,14 @@
 	import { Badge } from '$lib/components/ui/badge/index.js';
 	import { onMount, tick } from 'svelte';
 	import { ScrollSmoother } from 'gsap/ScrollSmoother';
+	import { m } from '$lib/paraglide/messages';
 
 	const messages = {
-		greeting: 'Xin chào, mình là',
+		greeting: m.mad_actual_zebra_learn(),
 		name: 'Lương Tuấn Anh',
-		tagline:
-			'Mình không chỉ code, mình xây dựng trải nghiệm - nơi ý tưởng trở thành sản phẩm có mục đích',
-		description:
-			'Với mình, sản phẩm không đơn thuần là công cụ, mà là cầu nối cảm xúc, định hình hành vi và tạo dấu ấn khó quên với người dùng.',
-		ctaText: 'Liên hệ trao đổi',
+		tagline: m.royal_lower_eagle_rest(),
+		description: m.drab_loved_midge_breathe(),
+		ctaText: m.early_broad_emu_boil(),
 		role: ['Marketing Executive', 'Developer']
 	};
 

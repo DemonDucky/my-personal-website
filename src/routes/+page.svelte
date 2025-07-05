@@ -4,15 +4,14 @@
 	import FeaturedProjectSection from './featured-project-section.svelte';
 	import HeroSection from './hero-section.svelte';
 	import WhatIDoSection from './what-i-do-section.svelte';
+	import { m } from '$lib/paraglide/messages';
 
 	const messages = {
-		title: 'Lương Tuấn Anh - Web Developer & Marketing Executive',
-		description:
-			'Một nhà phát triển web với tư duy marketing - mình xây dựng sản phẩm từ giao diện đến chiến lược, kết hợp trải nghiệm người dùng với định vị thương hiệu.',
-		keywords:
-			'web developer, marketing executive, frontend developer, backend developer, SvelteKit, React, Vue.js, UX/UI design, digital marketing, product development',
+		title: m.minor_late_halibut_conquer(),
+		description: m.wacky_noble_koala_burn(),
+		keywords: m.level_sunny_alligator_sprout(),
 		author: 'Lương Tuấn Anh',
-		siteName: 'Lương Tuấn Anh Portfolio',
+		siteName: 'Lương Tuấn Anh Personal Webiste',
 		imageUrl: '/imgs/logo.svg',
 		type: 'website',
 		locale: 'vi_VN'

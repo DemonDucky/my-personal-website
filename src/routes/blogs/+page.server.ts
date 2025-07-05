@@ -1,7 +1,9 @@
 import type { PageServerLoad } from './$types';
 import type { Post } from '$lib/types/post';
+import { getLocale } from '$lib/paraglide/runtime';
 export const load: PageServerLoad = async ({ fetch }) => {
-	const response = await fetch('/api/posts');
+	const locale = getLocale();
+	const response = await fetch(`/api/posts?locale=${locale}`);
 	const posts: Post[] = await response.json();
 
 	// Simple sidebar data using basic Post type

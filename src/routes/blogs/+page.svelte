@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { goto } from '$app/navigation';
 	import { page } from '$app/state';
 	import BreadcrumbContainer from '$lib/components/breadcrumb-container.svelte';
 	import { Badge } from '$lib/components/ui/badge';
@@ -14,23 +13,21 @@
 	import BlogSidebar from './blog-sidebar.svelte';
 	import Clock from 'phosphor-svelte/lib/Clock';
 	import Calendar from 'phosphor-svelte/lib/Calendar';
+	import { localizeAndRemoveEndTrailingSlash } from '$lib/utils';
+	import { m } from '$lib/paraglide/messages';
 
 	let { data }: { data: PageData } = $props();
 
 	const messages = {
-		title: 'Blog của Lương Tuấn Anh',
-		subtitle: 'Quyển nhật ký của mình, nơi có thể có gì đó bạn cần.',
-		breadcrumbHome: 'Trang chủ',
+		title: m.careful_tasty_puma_promise(),
+		subtitle: m.proud_teal_hedgehog_dare(),
+		breadcrumbHome: m.loud_fair_salmon_seek(),
 		breadcrumbBlogs: 'Blogs',
-		seoTitle: 'Blog của Lương Tuấn Anh',
-		seoDescription: 'Khám phá các bài viết về đa ngành với góc nhìn của mình.',
+		seoTitle: m.shy_loud_leopard_snap(),
+		seoDescription: m.front_zesty_angelfish_work(),
 		seoKeywords:
 			'blog lập trình, sveltekit, svelte, javascript, typescript, web development, front-end, programming, vietnamese tech blog, marketing, digital marketing, digital transformation',
-		readingTime: 'phút đọc'
-	};
-
-	const navigateToPost = (slug: string) => {
-		goto(`/blogs/${slug}`);
+		readingTime: m.sea_fun_florian_pause()
 	};
 
 	const formatDate = (dateString: string) => {
@@ -132,7 +129,6 @@
 	<meta name="keywords" content={messages.seoKeywords} />
 	<meta name="author" content={authorName} />
 	<meta name="robots" content="index, follow" />
-	<meta name="language" content="Vietnamese" />
 	<meta name="revisit-after" content="7 days" />
 
 	<!-- Open Graph / Facebook -->
@@ -188,11 +184,7 @@
 		<div class="grid grid-cols-1 gap-12 lg:grid-cols-4">
 			<!-- Sidebar - Shows first on mobile, last on desktop -->
 			<aside class="order-1 hidden lg:order-2 lg:col-span-1 lg:block" aria-label="Blog sidebar">
-				<BlogSidebar
-					categories={data.categories}
-					recentPosts={data.recentPosts}
-					onNavigateToPost={navigateToPost}
-				/>
+				<BlogSidebar categories={data.categories} recentPosts={data.recentPosts} />
 			</aside>
 
 			<!-- Main Content - Shows second on mobile, first on desktop -->
@@ -200,54 +192,45 @@
 				<div class="grid gap-6">
 					{#each data.posts as post, index}
 						<article>
-							<Card
-								class="cursor-pointer transition-shadow hover:shadow-lg"
-								onclick={() => navigateToPost(post.slug)}
-								role="button"
-								tabindex={0}
-								aria-label="Read blog post: {post.title}"
-								onkeydown={(e) => {
-									if (e.key === 'Enter' || e.key === ' ') {
-										e.preventDefault();
-										navigateToPost(post.slug);
-									}
-								}}
-							>
-								<CardHeader>
-									<div class="mb-2 flex flex-wrap gap-2">
-										{#each post.categories as category}
-											<Badge variant="secondary" aria-label="Category: {category}">{category}</Badge
-											>
-										{/each}
-									</div>
-									<CardTitle class="text-xl">
-										<h2>{post.title}</h2>
-									</CardTitle>
-									<CardDescription class="text-muted-foreground text-sm">
-										<div class="flex flex-col gap-1 sm:flex-row sm:items-center sm:gap-4">
-											<div class="flex items-center gap-1">
-												<Calendar size={14} />
-												<time
-													datetime={post.updated || post.created}
-													aria-label="Published on {formatDate(post.updated || post.created)}"
+							<a href={localizeAndRemoveEndTrailingSlash(`/blogs/${post.slug}`)} class="block">
+								<Card class="transition-shadow hover:shadow-lg">
+									<CardHeader>
+										<div class="mb-2 flex flex-wrap gap-2">
+											{#each post.categories as category}
+												<Badge variant="secondary" aria-label="Category: {category}"
+													>{category}</Badge
 												>
-													{formatDate(post.updated || post.created)}
-												</time>
-											</div>
-											<div class="flex items-center gap-1">
-												<Clock size={14} />
-												<span>
-													{calculateReadingTime(post.wordCount)}
-													{messages.readingTime}
-												</span>
+											{/each}
+										</div>
+										<CardTitle class="text-xl">
+											<h2>{post.title}</h2>
+										</CardTitle>
+										<div class="text-muted-foreground text-sm">
+											<div class="flex flex-col gap-1 sm:flex-row sm:items-center sm:gap-4">
+												<div class="flex items-center gap-1">
+													<Calendar size={14} />
+													<time
+														datetime={post.updated || post.created}
+														aria-label="Published on {formatDate(post.updated || post.created)}"
+													>
+														{formatDate(post.updated || post.created)}
+													</time>
+												</div>
+												<div class="flex items-center gap-1">
+													<Clock size={14} />
+													<span>
+														{calculateReadingTime(post.wordCount)}
+														{messages.readingTime}
+													</span>
+												</div>
 											</div>
 										</div>
-									</CardDescription>
-								</CardHeader>
-								<CardContent>
-									<p class="text-muted-foreground">{post.description}</p>
-								</CardContent>
-							</Card>
+									</CardHeader>
+									<CardContent>
+										<p class="text-muted-foreground">{post.description}</p>
+									</CardContent>
+								</Card>
+							</a>
 						</article>
 					{/each}
 				</div>

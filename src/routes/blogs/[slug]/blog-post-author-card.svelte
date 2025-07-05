@@ -2,13 +2,13 @@
 	import { Button } from '$lib/components/ui/button';
 	import GithubLogo from 'phosphor-svelte/lib/GithubLogo';
 	import FacebookLogo from 'phosphor-svelte/lib/FacebookLogo';
+	import { m } from '$lib/paraglide/messages';
 
 	const messages = {
-		aboutAuthor: 'Về tác giả',
+		aboutAuthor: m.plain_vivid_parrot_hack(),
 		authorName: 'Lương Tuấn Anh',
-		authorBio:
-			'Mình xuất phát từ marketing, nhưng thích tự tay xây cả sản phẩm lẫn thương hiệu. Blog này là nơi mình ghi lại những gì học được khi biến ý tưởng thành thứ có thể chạm được, thấy được.',
-		followMe: 'Theo dõi tôi'
+		authorBio: m.dark_dull_lark_accept(),
+		followMe: m.many_clear_crab_believe()
 	};
 </script>
 
@@ -51,11 +51,11 @@
 							target="_blank"
 							rel="noopener noreferrer"
 							size="icon"
-							class="h-8 w-8 p-0"
+							class="size-10 p-0"
 							itemprop="sameAs"
 							aria-label="GitHub của {messages.authorName}"
 						>
-							<GithubLogo size={16} />
+							<GithubLogo class="size-5" />
 							<span class="sr-only">GitHub</span>
 						</Button>
 						<Button
@@ -64,11 +64,11 @@
 							target="_blank"
 							rel="noopener noreferrer"
 							size="icon"
-							class="h-8 w-8 p-0"
+							class="size-10 p-0"
 							itemprop="sameAs"
 							aria-label="Facebook của {messages.authorName}"
 						>
-							<FacebookLogo size={16} />
+							<FacebookLogo class="size-5" />
 							<span class="sr-only">Facebook</span>
 						</Button>
 					</div>

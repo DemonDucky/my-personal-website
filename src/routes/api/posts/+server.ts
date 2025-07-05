@@ -5,8 +5,18 @@ import type { Post } from '$lib/types/post';
 type SortField = keyof Post;
 type SortOrder = 'asc' | 'desc';
 
-async function getPosts(sortBy: SortField = 'created', order: SortOrder = 'desc'): Promise<Post[]> {
-	const paths = import.meta.glob('/src/posts/*.svx', { eager: true });
+async function getPosts(
+	sortBy: SortField = 'created',
+	order: SortOrder = 'desc',
+	locale: string = 'vi'
+): Promise<Post[]> {
+	let paths;
+
+	if (locale === 'en') {
+		paths = import.meta.glob(`/src/posts/en/*.svx`, { eager: true });
+	} else {
+		paths = import.meta.glob(`/src/posts/vi/*.svx`, { eager: true });
+	}
 
 	const posts = Object.entries(paths)
 		.map(([path, file]) => {
@@ -43,10 +53,11 @@ async function getPosts(sortBy: SortField = 'created', order: SortOrder = 'desc'
 	return posts;
 }
 
-export const GET: RequestHandler = async () => {
+export const GET: RequestHandler = async ({ url }) => {
 	// const sortBy = (url.searchParams.get('sortBy') as SortField) ?? 'created';
 	// const order = (url.searchParams.get('order') as SortOrder) ?? 'desc';
+	const locale = url.searchParams.get('locale') ?? 'vi';
 
-	const posts = await getPosts('created', 'desc');
+	const posts = await getPosts('created', 'desc', locale);
 	return json(posts);
 };

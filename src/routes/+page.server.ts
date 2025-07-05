@@ -87,7 +87,7 @@ export const actions: Actions = {
 
 		try {
 			// Send email using Resend
-			const { data, error } = await resend.emails.send({
+			const { error } = await resend.emails.send({
 				from: 'contact@amorees.com',
 				to: 'luong.tuananh.biz@gmail.com',
 				subject: `[Quan Trọng] Có người liên hệ mới từ portfolio: ${form.data.name}`,
@@ -102,8 +102,6 @@ export const actions: Actions = {
 					error: 'Failed to send email'
 				};
 			}
-
-			console.log('Email sent successfully:', data);
 
 			return {
 				success: true,

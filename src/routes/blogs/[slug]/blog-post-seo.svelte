@@ -1,6 +1,7 @@
 <script lang="ts">
 	import type { Post } from '$lib/types/post';
-
+	import { getLocale } from '$lib/paraglide/runtime';
+	import { localizeAndRemoveEndTrailingSlash } from '$lib/utils';
 	interface Props {
 		post: Post;
 		readingTimeMinutes: number;
@@ -18,8 +19,9 @@
 	const siteName = messages.siteName;
 	const authorName = messages.authorName;
 	const authorUrl = 'https://luongtuananh.com';
-	const imgs =
-		'https://luongtuananh.com' + post.thumbnail || 'https://luongtuananh.com/imgs/logo.svg';
+	const imgs = post.thumbnail
+		? 'https://luongtuananh.com' + post.thumbnail
+		: 'https://luongtuananh.com/imgs/logo.svg';
 
 	const formatDateISO = (dateString: string) => {
 		const date = new Date(dateString);
@@ -67,12 +69,40 @@
 	// Generate enhanced meta description
 	const metaDescription =
 		post.description.length > 160 ? post.description.substring(0, 157) + '...' : post.description;
+
+	const xDefault =
+		post.translations && post.translations.some((translation) => 'en' in translation)
+			? siteUrl +
+				localizeAndRemoveEndTrailingSlash('/blogs/' + post.translations?.[0]?.en, { locale: 'en' })
+			: siteUrl + localizeAndRemoveEndTrailingSlash('/blogs/' + post.slug, { locale: getLocale() });
 </script>
 
 <svelte:head>
+	{#if post.translations}
+		{#each post.translations as translation}
+			{#each Object.entries(translation) as [lang, slug]}
+				<link
+					rel="alternate"
+					href={siteUrl + localizeAndRemoveEndTrailingSlash('/blogs/' + slug, { locale: lang })}
+					hreflang={lang}
+				/>
+			{/each}
+		{/each}
+	{/if}
+
+	<!-- Alternate link for current locale -->
+	<link
+		rel="alternate"
+		href={siteUrl +
+			localizeAndRemoveEndTrailingSlash('/blogs/' + post.slug, { locale: getLocale() })}
+		hreflang={getLocale()}
+	/>
+
+	<!-- Alternate link for x-default -->
+	<link rel="alternate" href={xDefault} hreflang="x-default" />
 	<!-- Primary Meta Tags -->
-	<title>{post.title} - {siteName}</title>
-	<meta name="title" content="{post.title} - {siteName}" />
+	<title>{post.title}</title>
+	<meta name="title" content={post.title} />
 	<meta name="description" content={metaDescription} />
 	<meta name="keywords" content={post.categories.join(', ')} />
 	<meta name="author" content={authorName} />

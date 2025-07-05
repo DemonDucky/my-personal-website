@@ -2,6 +2,7 @@
 	import type { Post } from '$lib/types/post';
 	import * as Alert from '$lib/components/ui/alert';
 	import WarningCircle from 'phosphor-svelte/lib/WarningCircle';
+	import { m } from '$lib/paraglide/messages';
 
 	interface Props {
 		post: Post;
@@ -10,9 +11,8 @@
 	let { post }: Props = $props();
 
 	const messages = {
-		outdatedWarning: 'Cảnh báo nội dung cũ',
-		outdatedDescription:
-			'Bài viết này đã được viết cách đây hơn 2 năm, một vài kỹ thuật có thể đã lỗi thời. Bạn nên kiểm tra kĩ trước khi áp dụng.'
+		outdatedWarning: m.actual_tired_grebe_gaze(),
+		outdatedDescription: m.dull_ok_elk_walk()
 	};
 
 	const isPostOlderThanTwoYears = () => {
