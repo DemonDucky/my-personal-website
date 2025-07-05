@@ -5,7 +5,7 @@ import type { Post } from '$lib/types/post';
 type SortField = keyof Post;
 type SortOrder = 'asc' | 'desc';
 
-async function getPosts(sortBy: SortField = 'date', order: SortOrder = 'desc'): Promise<Post[]> {
+async function getPosts(sortBy: SortField = 'created', order: SortOrder = 'desc'): Promise<Post[]> {
 	const paths = import.meta.glob('/src/posts/*.svx', { eager: true });
 
 	const posts = Object.entries(paths)
@@ -25,7 +25,7 @@ async function getPosts(sortBy: SortField = 'date', order: SortOrder = 'desc'): 
 			const bValue = b[sortBy];
 
 			// Handle date sorting
-			if (sortBy === 'date') {
+			if (sortBy === 'created') {
 				const aTime = new Date(aValue as string).getTime();
 				const bTime = new Date(bValue as string).getTime();
 				return order === 'desc' ? bTime - aTime : aTime - bTime;
@@ -43,10 +43,10 @@ async function getPosts(sortBy: SortField = 'date', order: SortOrder = 'desc'): 
 	return posts;
 }
 
-export const GET: RequestHandler = async ({ url }) => {
-	const sortBy = (url.searchParams.get('sortBy') as SortField) ?? 'date';
-	const order = (url.searchParams.get('order') as SortOrder) ?? 'desc';
+export const GET: RequestHandler = async () => {
+	// const sortBy = (url.searchParams.get('sortBy') as SortField) ?? 'created';
+	// const order = (url.searchParams.get('order') as SortOrder) ?? 'desc';
 
-	const posts = await getPosts(sortBy, order);
+	const posts = await getPosts('created', 'desc');
 	return json(posts);
 };
