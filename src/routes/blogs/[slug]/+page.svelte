@@ -1,187 +1,76 @@
 <script lang="ts">
 	import type { PageData } from './$types';
-	import { Badge } from '$lib/components/ui/badge';
-	import { Button } from '$lib/components/ui/button';
-	import * as Alert from '$lib/components/ui/alert';
-	import { goto } from '$app/navigation';
-	import ArrowLeft from 'phosphor-svelte/lib/ArrowLeft';
-	import Calendar from 'phosphor-svelte/lib/Calendar';
-	import WarningCircle from 'phosphor-svelte/lib/WarningCircle';
-	import GithubLogo from 'phosphor-svelte/lib/GithubLogo';
-	import FacebookLogo from 'phosphor-svelte/lib/FacebookLogo';
+	import BreadcrumbContainer from '$lib/components/breadcrumb-container.svelte';
+	import BlogPostSeo from './blog-post-seo.svelte';
+	import BlogPostHeader from './blog-post-header.svelte';
+	import BlogPostOutdatedWarning from './blog-post-outdated-warning.svelte';
+	import BlogPostAuthorCard from './blog-post-author-card.svelte';
 
 	let { data }: { data: PageData } = $props();
 
 	const messages = {
-		backToBlog: 'Quay lại Blog',
-		publishedOn: 'Xuất bản vào',
-		updatedOn: 'Cập nhật lần cuối',
-		outdatedWarning: 'Cảnh báo nội dung cũ',
-		outdatedDescription:
-			'Bài viết này đã được viết cách đây hơn 2 năm, một vài kỹ thuật có thể đã lỗi thời. Bạn nên kiểm tra kĩ trước khi áp dụng.',
-		aboutAuthor: 'Về tác giả',
-		authorName: 'Lương Tuấn Anh',
-		authorBio:
-			'Mình xuất phát từ marketing, nhưng thích tự tay xây cả sản phẩm lẫn thương hiệu. Blog này là nơi mình ghi lại những gì học được khi biến ý tưởng thành thứ có thể chạm được, thấy được.',
-		followMe: 'Theo dõi tôi'
+		breadcrumbHome: 'Trang chủ',
+		breadcrumbBlogs: 'Blogs'
 	};
 
-	const formatDate = (dateString: string) => {
+	const formatDateISO = (dateString: string) => {
 		const date = new Date(dateString);
-		return date.toLocaleDateString('vi-VN', {
-			year: 'numeric',
-			month: 'long',
-			day: 'numeric'
-		});
+		return date.toISOString();
 	};
 
-	const isPostOlderThanTwoYears = () => {
-		const now = new Date();
-
-		// Check updated date first, if not available, check created date
-		const dateToCheck = data.post.updated || data.post.created;
-		const postDate = new Date(dateToCheck);
-
-		// Calculate the difference in milliseconds
-		const timeDifference = now.getTime() - postDate.getTime();
-
-		// Convert to years (365.25 days to account for leap years)
-		const yearsDifference = timeDifference / (1000 * 60 * 60 * 24 * 365.25);
-
-		return yearsDifference > 2;
+	const calculateReadingTime = (wordCount: number) => {
+		const wordsPerMinute = 200; // Average reading speed
+		const minutes = Math.ceil(wordCount / wordsPerMinute);
+		return minutes;
 	};
 
-	const goBack = () => {
-		goto('/blogs');
+	const formatReadingTimeISO = (minutes: number) => {
+		// ISO 8601 duration format: PT[n]M for minutes
+		return `PT${minutes}M`;
 	};
+
+	const siteName = 'Lương Tuấn Anh Blog';
+	const authorName = 'Lương Tuấn Anh';
+	const readingTimeMinutes = calculateReadingTime(data.post.wordCount);
 </script>
 
-<svelte:head>
-	<title>{data.post.title}</title>
-	<meta name="description" content={data.post.description} />
-</svelte:head>
+<BlogPostSeo post={data.post} {readingTimeMinutes} />
+
+<BreadcrumbContainer
+	breadcrumbNavigations={[
+		{ href: '/', label: messages.breadcrumbHome },
+		{ href: '/blogs', label: messages.breadcrumbBlogs },
+		{ href: `/blogs/${data.post.slug}`, label: data.post.title.slice(0, 20) + '...' }
+	]}
+/>
 
 <div class="container mx-auto px-4 py-12 sm:px-6 lg:px-8">
 	<div class="mx-auto max-w-4xl">
-		<!-- Back Button -->
-		<div class="mb-8">
-			<Button variant="ghost" onclick={goBack} class="cursor-pointer gap-2">
-				<ArrowLeft size={16} />
-				{messages.backToBlog}
-			</Button>
-		</div>
+		<BlogPostHeader post={data.post} />
 
-		<!-- Post Header -->
-		<section class="mb-8 space-y-6">
-			<!-- Categories -->
-			<div class="flex flex-wrap gap-2">
-				{#each data.post.categories as category}
-					<Badge variant="secondary">{category}</Badge>
-				{/each}
+		<BlogPostOutdatedWarning post={data.post} />
+
+		<article
+			class="prose lg:prose-lg dark:prose-invert prose-zinc !max-w-none"
+			itemscope
+			itemtype="https://schema.org/BlogPosting"
+		>
+			<meta itemprop="headline" content={data.post.title} />
+			<meta itemprop="description" content={data.post.description} />
+			<meta itemprop="datePublished" content={formatDateISO(data.post.created)} />
+			<meta
+				itemprop="dateModified"
+				content={formatDateISO(data.post.updated || data.post.created)}
+			/>
+			<meta itemprop="author" content={authorName} />
+			<meta itemprop="publisher" content={siteName} />
+			<meta itemprop="wordCount" content={data.post.wordCount.toString()} />
+			<meta itemprop="timeRequired" content={formatReadingTimeISO(readingTimeMinutes)} />
+			<div itemprop="articleBody">
+				<data.Content />
 			</div>
-
-			<!-- Title -->
-			<h1 class="text-foreground text-3xl font-bold lg:text-4xl">
-				{data.post.title}
-			</h1>
-
-			<!-- Description -->
-			<p class="text-muted-foreground text-lg leading-relaxed">
-				{data.post.description}
-			</p>
-
-			<!-- Date -->
-			<div class="text-muted-foreground flex items-center gap-2 text-xs">
-				<Calendar size={16} />
-				<span>
-					{messages.publishedOn}
-					{formatDate(data.post.created)}
-				</span>
-			</div>
-
-			<!-- Updated Date -->
-			{#if data.post.updated}
-				<div class="text-muted-foreground flex items-center gap-2 text-xs">
-					<Calendar size={16} />
-					<span>
-						{messages.updatedOn}
-						{formatDate(data.post.updated)}
-					</span>
-				</div>
-			{/if}
-
-			<!-- Divider -->
-			<div class="bg-border h-px"></div>
-		</section>
-
-		<!-- Post Content -->
-		{#if isPostOlderThanTwoYears()}
-			<Alert.Root variant="destructive" class="mb-6">
-				<WarningCircle class="size-4" />
-				<Alert.Title class="font-bold">{messages.outdatedWarning}</Alert.Title>
-				<Alert.Description>
-					{messages.outdatedDescription}
-				</Alert.Description>
-			</Alert.Root>
-		{/if}
-
-		<article class="prose lg:prose-lg dark:prose-invert prose-zinc !max-w-none">
-			<data.Content />
 		</article>
 
-		<!-- Author Card -->
-		<section class="border-border mt-12 border-t pt-8">
-			<div class="bg-muted/30 rounded-lg p-6">
-				<h3 class="text-foreground mb-4 text-xl font-semibold">{messages.aboutAuthor}</h3>
-
-				<div class="flex flex-col gap-4 sm:flex-row sm:items-start">
-					<!-- Author Avatar -->
-					<div class="flex-shrink-0">
-						<div
-							class="bg-primary/10 text-primary flex h-16 w-16 items-center justify-center rounded-full text-2xl font-bold"
-						>
-							{messages.authorName.charAt(0)}
-						</div>
-					</div>
-
-					<!-- Author Info -->
-					<div class="flex-1 space-y-3">
-						<div>
-							<h4 class="text-foreground text-lg font-medium">{messages.authorName}</h4>
-							<p class="text-muted-foreground text-sm leading-relaxed">
-								{messages.authorBio}
-							</p>
-						</div>
-
-						<!-- Social Links -->
-						<div class="flex items-center gap-2">
-							<span class="text-muted-foreground text-sm">{messages.followMe}:</span>
-							<div class="flex gap-2">
-								<Button
-									variant="outline"
-									href="https://github.com/demonducky"
-									target="_blank"
-									size="icon"
-									class="h-8 w-8 p-0"
-								>
-									<GithubLogo size={16} />
-									<span class="sr-only">GitHub</span>
-								</Button>
-								<Button
-									variant="outline"
-									href="https://www.facebook.com/tuananh.luonggg/"
-									target="_blank"
-									size="icon"
-									class="h-8 w-8 p-0"
-								>
-									<FacebookLogo size={16} />
-									<span class="sr-only">Facebook</span>
-								</Button>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</section>
+		<BlogPostAuthorCard />
 	</div>
 </div>

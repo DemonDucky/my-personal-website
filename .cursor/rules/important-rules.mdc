@@ -6,6 +6,7 @@ alwaysApply: true
 # Key Guidelines
 - Always adhere to accessibility (a11y) standards in all Svelte components and applications.
 - Always use TypeScript in Svelte files, ensuring type safety with `.svelte` scripts (e.g., `<script lang="ts">`) and related `.ts` files.
+- All pages must follow SEO best practices — including semantic HTML, proper heading structure, meta tags, accessible alt texts, and meaningful link text, schema.
 - Never use custom colors directly; only use color variables defined in `app.css` (e.g., `var(--primary)`) for consistency and theme control.
 - Never introduce a custom svg or anything for icon display. Always use icons from **phosphor-svelte**, and prefer direct path imports (e.g., `import Cube from "phosphor-svelte/lib/Cube"`) for better compile performance. Avoid named imports like `import { X } from "phosphor-svelte"`.
 - Place commonly used components (e.g., buttons, inputs) in `lib/components`; for single-use components, place them alongside the file where they are used.

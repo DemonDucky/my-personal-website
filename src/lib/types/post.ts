@@ -7,5 +7,7 @@ export type Post = {
 	created: string;
 	updated: string | null;
 	categories: Categories[];
+	wordCount: number;
+	thumbnail: string | null;
 	published: boolean;
 };

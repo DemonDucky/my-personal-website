@@ -2,7 +2,7 @@
 title: Svelte 5 + Sveltekit - Lựa chọn hoàn hảo để thay thế React/Next.js
 description: React/Next.js từ lâu đã là lựa chọn mặc định của rất nhiều lập trình viên khi bắt đầu một dự án web app. Nhưng trong thế giới frontend luôn thay đổi, liệu đây còn là giải pháp tối ưu nhất hiện nay?
 created: 2025-07-04
-updated: null
+wordCount: 1505
 categories:
   - Svelte 5
   - SvelteKit

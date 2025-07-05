@@ -1,16 +1,15 @@
 <script lang="ts">
-	import '../app.css';
+	import { page } from '$app/state';
 	import Header from '$lib/components/header.svelte';
-	import { onMount, tick } from 'svelte';
+	import { Toaster } from '$lib/components/ui/sonner/index.js';
+	import { locales } from '$lib/paraglide/runtime';
+	import { localizeAndRemoveEndTrailingSlash } from '$lib/utils';
 	import gsap from 'gsap';
 	import { ScrollSmoother } from 'gsap/ScrollSmoother';
 	import { ScrollTrigger } from 'gsap/ScrollTrigger';
-	import { localizeAndRemoveEndTrailingSlash } from '$lib/utils';
-	import { locales } from '$lib/paraglide/runtime';
-	import { page } from '$app/state';
-	import { Toaster } from '$lib/components/ui/sonner/index.js';
 	import { ModeWatcher } from 'mode-watcher';
-	import { afterNavigate, disableScrollHandling } from '$app/navigation';
+	import { onMount } from 'svelte';
+	import '../app.css';
 	let { children } = $props();
 
 	onMount(() => {
@@ -23,8 +22,8 @@
 			content: '#smooth-content',
 			normalizeScroll: true,
 			smooth: 1, // how long (in seconds) it takes to "catch up" to the native scroll position
-			effects: true, // looks for data-speed and data-lag attributes on elements
-			smoothTouch: 0.1 // much shorter smoothing time on touch devices,
+			effects: true // looks for data-speed and data-lag attributes on elements
+			// smoothTouch: 0.1 // much shorter smoothing time on touch devices,
 		});
 	});
 

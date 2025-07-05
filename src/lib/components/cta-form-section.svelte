@@ -74,7 +74,7 @@
 						<h3 class="mb-2 text-xl font-bold">{messages.thankYouMessage}</h3>
 					</div>
 				{:else}
-					<form class="space-y-6" method="POST" action="?/contact" use:enhance>
+					<form class="space-y-6" method="POST" action="/?/contact" use:enhance>
 						<!-- Name Input -->
 						<Form.Field {form} name="name">
 							<Form.Control>
